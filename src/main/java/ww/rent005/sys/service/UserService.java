@@ -2,6 +2,7 @@ package ww.rent005.sys.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import ww.rent005.sys.entity.User;
+import ww.rent005.sys.vo.UserVo;
 
 /**
  * <p>
@@ -13,4 +14,9 @@ import ww.rent005.sys.entity.User;
  */
 public interface UserService extends IService<User> {
 
+    void delUserByUid(String id);
+
+    void deleteBatchUsersByIds(String[] ids);
+
+    void addRoleUser(UserVo userVo);
 }

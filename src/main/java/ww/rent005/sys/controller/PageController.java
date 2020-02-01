@@ -48,6 +48,87 @@ public class PageController {
         return "rent/index/console";
     }
 
+    /**
+     * 至权限页面
+     * @return
+     */
+    @RequestMapping("toPermissionManager")
+    public String toPermission(){
+        return "rent/permission/permission";
+    }
+
+    /**
+     * 至菜单页面
+     * @return
+     */
+    @RequestMapping("toMenuManager")
+    public String toMenu(){
+        return "rent/menu/menu";
+    }
+
+    /**
+     * 菜单管理左侧树
+     */
+    @RequestMapping("toMenuLeftTree")
+    public String toMenuLeftTree(){
+        return "rent/menu/menuLeftTree";
+    }
+    /**
+     * 菜单管理右侧管理列表
+     */
+    @RequestMapping("toMenuRightPage")
+    public String toMenuRightPage(){
+        return "rent/menu/menuRightPage";
+    }
+
+    /**
+     * 权限管理左侧树
+     */
+    @RequestMapping("toPermissionLeftTree")
+    public String toPermissionLeftTree(){
+        return "rent/permission/permissionLeftTree";
+    }
+
+    /**
+     * 权限管理右侧管理列表
+     */
+    @RequestMapping("toPermissionRightPage")
+    public String toPermissionRightPage(){
+        return "rent/permission/permissionRightPage";
+    }
+
+    /**
+     * 至角色管理页面
+     */
+    @RequestMapping("toRoleManager")
+    public String toRoleManager(){
+        return "rent/role/roleManager";
+    }
+
+    /**
+     * 至用户管理页面
+     */
+    @RequestMapping("toUserManager")
+    public String toUserManager(){
+        return "rent/user/userManager";
+    }
+
+    /**
+     * 至车辆管理页面
+     */
+    @RequestMapping("toCarManager")
+    public String toCarManager(){
+        return "rent/car/carManager";
+    }
+
+    /**
+     * 至客户管理页面
+     */
+    @RequestMapping("toCustomerManager")
+    public String toCustomerManager(){
+        return "rent/customer/customerManager";
+    }
+
 
     /**
      * 获得验证码

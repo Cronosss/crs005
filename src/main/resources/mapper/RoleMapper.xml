@@ -16,4 +16,26 @@
         id, name, remark, available, createTime
     </sql>
 
+    <!-- 添加角色权限信息 -->
+    <insert id="addRolePermission">
+        insert into tb_role_permission(rid,pid) values(#{rid},#{pid});
+    </insert>
+
+    <!-- 根据角色id删除角色/权限表 -->
+    <delete id="delRolePermissionByRid">
+        delete from tb_role_permission where rid = #{rid}
+    </delete>
+
+    <!-- 根据角色id删除角色/用户表 -->
+    <delete id="delRoleUserByRid">
+        delete from tb_role_user where rid = #{rid}
+    </delete>
+
+    <!-- 根据uid查询角色信息 -->
+    <select id="findUserRoleByUid" resultType="ww.rent005.sys.entity.Role">
+        select r.* from tb_role r inner join tb_role_user ru on r.id = ru.rid
+        where r.available = #{available} and ru.uid=#{uid} ;
+    </select>
+
+
 </mapper>

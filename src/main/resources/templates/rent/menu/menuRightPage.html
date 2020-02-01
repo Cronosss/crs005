@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>菜单列表</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/public.css" media="all" />
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/dtree.css">
+    <link rel="stylesheet" href="/resources/layui_ext/dtree/font/dtreefont.css">
+
+    <style type="text/css">
+        .select-test{position: absolute;max-height: 500px;height: 350px;overflow: auto;width: 100%;z-index: 123;display: none;border:1px solid silver;top: 42px;}
+        .layui-show{display: block!important;}
+    </style>
+
+    </head>
+    <body class="childrenBody">
+    <div class="layui-container">
+        <!-- 搜索条件开始 -->
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+            <legend>查询条件</legend>
+        </fieldset>
+        <form class="layui-form" method="post" id="searchForm">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">菜单名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="title" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal
+                        layui-icon layui-icon-search" id="doSearch">搜索</button>
+                    <button type="reset" class="layui-btn layui-btn-warm
+                        layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+                </div>
+            </div>
+        </form>
+        <!-- 搜索条件结束 -->
+
+        <!-- 数据表格开始 -->
+        <table class="layui-hide" id="test" lay-filter="test"></table>
+        <!-- 数据表格结束 -->
+
+        <!-- 添加和修改弹出层开始 -->
+        <div style="display: none;padding:20px 20px 0 20px;" id="saveOrUpdateDiv">
+            <form class="layui-form" lay-filter="dataFrm" id="dataFrm">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">父级菜单</label>
+                        <div class="layui-input-inline">
+                            <div class="layui-unselect layui-form-select" id="pidDiv">
+                                <div class="layui-select-title">
+                                    <input type="hidden" name="pid" id="pid" >
+                                    <input type="text" name="pidStr" id="pidStr" lay-verify="required" placeholder="请选择父级菜单" readonly="" class="layui-input layui-unselect">
+                                    <i class="layui-edge"></i>
+                                </div>
+                            </div>
+                            <div class="layui-card select-test" id="menuSelectDiv">
+                                <div class="layui-card-body">
+                                    <div id="toolbarDiv">
+                                        <ul id="menuTreeShow" class="dtree" data-id="0" style="width: 100%;"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                    <label class="layui-form-label">菜单名称</label>
+                        <div class="layui-input-inline">
+                            <input type="hidden" name="id">
+                            <input type="text" name="title" lay-verify="required" autocomplete="off" class="layui-input"  placeholder="请输入菜单名称">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">菜单地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="href" autocomplete="off" class="layui-input"  placeholder="请输入菜单地址">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">菜单图标</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="icon" autocomplete="off" class="layui-input"  placeholder="请输入菜单图标">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">是否展开</label>
+                        <div class="layui-input-inline">
+                            <input type="radio" name="spread" value="1" title="展开">
+                            <input type="radio" name="spread" value="0" title="不展开" checked="checked">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">是否可用</label>
+                        <div class="layui-input-inline">
+                            <input type="radio" name="available" value="1" title="可用">
+                            <input type="radio" name="available" value="0" title="不可用" checked="checked">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="text-align: center;">
+                    <div class="layui-block">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal layui-icon layui-icon-search"
+                            lay-submit="" lay-filter="doSave">保存</button>
+                        <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    <!-- 添加和修改弹出层结束 -->
+    </div>
+
+    <script type="text/javascript" src="/resources/layui/layui.js"></script>
+    <script type="text/html" id="toolbarTop">
+        <div class="layui-btn-container">
+            <button class="layui-btn layui-btn-sm" lay-event="add">增加</button>
+        </div>
+    </script>
+    <script type="text/html" id="barRight">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+
+    <script>
+        //先声明table组件 便于之后渲染
+        var tbIns ;
+        layui.extend({
+                dtree:'/resources/layui_ext/dist/dtree'
+            }).use(['jquery','form','layer','table','laydate','dtree'],function () {
+            var $ = layui.jquery;
+            var form = layui.form;
+            var layer = layui.layer;
+            var table = layui.table;
+            var dtree = layui.dtree;
+
+            tbIns = table.render({
+                elem: '#test',//lay-filter对应值 渲染目标对象
+                url:'/menu/loadMenus', //数据接口
+                title: '菜单表', //数据导出的标题
+                page: true, //是否启用分页
+                height:"full-140",
+                toolbar:"#toolbarTop", //表格工具条
+                defaultToolbar:['filter'],    //右侧工具栏
+                cols: [
+                    [   //列数据
+                    {field:'id', title:'ID', sort:true, align:'center',width:'60'},
+                    {field:'pid', title:'父节点ID', sort:true, align:'center',width:'120'},
+                    {field:'title', title:'菜单名称', align:'center',width:'150'},
+                    {field:'href', title:'菜单地址', align:'center',width:'220'},
+                    {field:'spread', title:'是否展开', align:'center',width:'150',templet: function(res){
+                            return res.spread=='1'?'<font color=blue>展开</font>':'<font color=red>不展开</font>';}
+                    },
+                    {field:'icon', title:'菜单图标', align:'center',width:'150',templet:function (res){
+                        return "<div class='layui-icon'>"+res.icon+"</div>";}
+                    },
+                    {field:'available', title:'是否可用', align:'center',width:'120',templet:function (res){
+                        return res.available=='1'?'<font color=blue>可用</font>':'<font color=red>不可用</font>';}
+                    },
+                    {fixed:'right', title:'操作', toolbar:'#barRight', width:150, align:'center'}
+                ]
+                ],
+                //解决删除最后一行数据的分页问题
+                done:function (data, curr, count) {
+                    //不是第一页且返回数据为0则返回上一页
+                    if(curr!=1 && data.data.length==0){
+                        tbIns.reload({
+                            page:{
+                                curr:(curr-1)
+                            }
+                        })
+                    }
+                }
+            });
+
+            //模糊查询
+            $("#doSearch").click(function() {
+                var params = $("#searchForm").serialize();
+                tbIns.reload({
+                    //重新渲染
+                    url:"/menu/loadMenus?"+params,
+                    page:{curr:1}//默认跳至第一页
+                });
+            });
+
+            //插入和修改
+            //监听头部工具栏事件
+            table.on("toolbar(test)",function (obj) {
+                switch(obj.event){
+                    case 'add':
+                        openAddMenu();
+                        break;
+                };
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function(obj){
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+
+                if(layEvent === 'del'){ //删除
+                    doDeleteMenu(data);
+                    } else if(layEvent === 'edit'){ //编辑
+                    openUpdateMenu(data);
+                }
+            });
+
+            //删除
+            function doDeleteMenu(data){
+                //先判断当前菜单有无子节点
+                $.post("/menu/checkIsParentTree?id="+data.id,function(obj) {
+                    if(obj.code>0){
+                        layer.msg("当前菜单有子节点，请先删除子节点");
+                    }else {
+                        layer.confirm('真的删除'+data.title+'菜单么?', function(){
+                        //向服务端发送删除指令
+                        $.post("/menu/deleteMenuById?id="+data.id,function(obj) {
+                            layer.msg(obj.msg,{icon:1,time:500,});
+                            //刷新数据表格
+                            tbIns.reload();
+                            //刷新左边的树
+                            window.parent.leftManager.menuTree.reload();
+                            //刷新添加和修改的下拉树
+                            menuTree.reload();
+                            });
+                        });
+                    }
+                });
+            }
+
+            //根据url进行添加和更新
+            var url;
+            //先声明弹出层组件序号 便于之后关闭
+            var layerIndex;
+            //打开添加页面
+            function openAddMenu(){
+                layerIndex = layer.open({
+                    type:1,
+                    title:"添加菜单",
+                    content:$("#saveOrUpdateDiv"),
+                    area:['720px','400px'],
+                    success:function (index) {
+                        //情况表单数据
+                        //Jquery没有reset 变成dom调用reset
+                        $("#dataFrm")[0].reset();
+                        //移除展示
+                        $("#menuSelectDiv").removeClass("layui-show");
+                        url = "/menu/addMenu";
+                        }
+                });
+            }
+            //打开修改页面
+            function openUpdateMenu(data){
+                layerIndex = layer.open({
+                    type:1,
+                    title:"修改菜单",
+                    content:$("#saveOrUpdateDiv"),
+                    area:['720px','400px'],
+                    success:function () {
+                        form.val("dataFrm",data);
+                        url = "/menu/updateMenu";
+                        //选择下拉框
+                        var pId = data.pid;
+                        //menuTreeShow为渲染框id
+                        var params = dtree.dataInit("menuTreeShow",pId);
+                        //移除展示
+                        $("#menuSelectDiv").removeClass("layui-show");
+                        if(pId!=0){
+                            //对下拉框text赋值
+                            $("#pidStr").val(params.context);
+                        }else{
+                            $("#pidStr").val("这是根目录");
+                        }
+                    }
+                });
+            }
+
+            //保存数据
+            form.on('submit(doSave)', function(data){
+                //序列化表单数据
+                var params = $("#dataFrm").serialize();
+                $.post(url,params,function (data) {
+                    layer.msg(data.msg,{icon:1,time:500,});
+                    //关闭弹出层
+                    layer.close(layerIndex);
+                    //刷新数据表格
+                    tbIns.reload();
+                    //刷新左边的树
+                    //parent.leftManager.menuTree为同级树
+                    window.parent.leftManager.menuTree.reload();
+                    //刷新添加和修改的下拉树
+                    //重新加载时会带数据 此时为树spread被置为boolean类型 再次刷新时直接spread置1重新渲染
+                    //nodeId=2&parentId=1&context=XXXX&leaf=false&level=2&spread=true
+                    menuTree.reload();
+                })
+            });
+
+            //下拉框渲染
+            //初始化添加和修改页面的下拉树
+            var menuTree = dtree.render({
+                elem: "#menuTreeShow",//渲染框位置
+                dataStyle: "layuiStyle",  //使用layui风格的数据格式
+                response:{message:"msg",statusCode:0},  //修改response中返回数据的定义
+                dataFormat: "list",  //配置data的风格为list
+                url: "/menu/loadMenuManagerLeftTreeJsonData?spread=1", // 使用url加载（可与data加载同时存在）
+                icon: "2",
+                accordion:true//下拉
+            });
+            //pid所属Div
+            $("#pidDiv").on("click",function(){
+                    $(this).toggleClass("layui-form-selected");
+                    $("#menuSelectDiv").toggleClass("layui-show layui-anim layui-anim-upbit");
+            });
+            dtree.on("node(menuTreeShow)", function(obj){
+                //输入框赋值
+                $("#pidStr").val(obj.param.context);
+                //pid赋值 obj.param.nodeId取值
+                $("#pid").val(obj.param.nodeId);
+                $("#pidDiv").toggleClass("layui-form-selected");
+                //打开
+                $("#menuSelectDiv").toggleClass("layui-show layui-anim layui-anim-upbit");
+            });
+        });
+
+        //根据id重新加载
+        function reloadTableById(id) {
+            tbIns.reload({
+                //重新渲染
+                url:"/menu/loadMenus?id="+id
+            });
+        }
+    </script>
+    </body>
+</html>

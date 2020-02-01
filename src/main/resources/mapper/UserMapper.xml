@@ -23,4 +23,14 @@
         user_id, user_name, pass_word, nick_name, sex, address, phone, type, img, salt, available, create_time
     </sql>
 
+    <!-- 添加用户角色中间表信息 -->
+    <insert id="addRoleUser">
+        insert into tb_role_user(uid,rid) values (#{uid},#{rid});
+    </insert>
+
+    <!-- 删除用户角色中间表 -->
+    <delete id="delUserRoleByUid">
+        delete from tb_role_user where uid = #{uid}
+    </delete>
+
 </mapper>

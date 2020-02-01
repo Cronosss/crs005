@@ -13,5 +13,9 @@ public class UserVo extends User {
 	
 	private Integer page=1;
 	private Integer limit=10;
+	//用于接收多个用户id
+	private String ids[];
+	//用于接收角色id值
+	private Integer rid2[];
 	
 }

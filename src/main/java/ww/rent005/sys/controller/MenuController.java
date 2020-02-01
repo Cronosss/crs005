@@ -1,9 +1,11 @@
 package ww.rent005.sys.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import ww.rent005.sys.common.*;
 import ww.rent005.sys.entity.Permission;
@@ -30,12 +32,9 @@ public class MenuController {
 
     /**
      * 加载左侧菜单栏 注意json格式
-     * 菜单管理左侧菜单树 注意其json格式与总菜单格式是不同的
-     * 其中JSON数据需要parentId 在TreeNode类中已加上@JsonProperty("parentId")
      * @param permissionVo
      * @return
      */
-    @ResponseBody
     @RequestMapping("loadIndexLeftPermissionJson")
     public DataGrid loadIndexLeftPermissionJsonData(PermissionVo permissionVo){
         //查询所有菜单
@@ -66,7 +65,6 @@ public class MenuController {
         return new DataGrid(dataList);
     }
 
-
     /**
      * 菜单数据放入树数据
      * @param permissions
@@ -86,5 +84,113 @@ public class MenuController {
         }
         return nodes;
     }
-    
+
+    /**
+     * 菜单管理
+     */
+    /**
+     * 菜单管理左侧菜单树 注意其json格式与总菜单格式是不同的
+     * 其中JSON数据需要parentId 在TreeNode类中已加上@JsonProperty("parentId")
+     * @param permissionVo
+     * @return
+     */
+    @RequestMapping("loadMenuManagerLeftTreeJsonData")
+    public DataGrid loadMenuLeftTreeDataJson(PermissionVo permissionVo){
+        QueryWrapper<Permission> qw = new QueryWrapper<>();
+        //查询菜单
+        qw.eq("type",Constast.TYPE_MNEU);
+        List<Permission> list = permissionService.list(qw);
+        //将数据放入Tree中
+        List<TreeNode> nodes = new ArrayList<>();
+        return new DataGrid(putPermissionsInTree(list,nodes));
+    }
+
+    /**
+     * 用于加载菜单列表
+     * @param permissionVo
+     * @return
+     */
+    @RequestMapping("loadMenus")
+    public DataGrid loadAllMenu(PermissionVo permissionVo) {
+        IPage<Permission> page=new Page<>(permissionVo.getPage(), permissionVo.getLimit());
+        QueryWrapper<Permission> qw=new QueryWrapper<>();
+        //查询菜单
+        qw.eq("type", Constast.TYPE_MNEU);
+        //根据菜单名称模糊查询
+        qw.like(StringUtils.isNotBlank(permissionVo.getTitle()), "title", permissionVo.getTitle());
+        //根据id查询
+        qw.eq(permissionVo.getId()!=null, "id", permissionVo.getId())
+                .or()
+                .eq(permissionVo.getId()!=null,"pid", permissionVo.getId());
+        permissionService.page(page, qw);
+        return new DataGrid(page.getTotal(), page.getRecords());
+    }
+
+    /**
+     * 添加菜单
+     * @param permissionVo
+     * @return
+     */
+    @RequestMapping("addMenu")
+    public Result addMenu(PermissionVo permissionVo) {
+        try {
+            //添加类型设置为菜单
+            permissionVo.setType(Constast.TYPE_MNEU);
+            permissionService.save(permissionVo);
+            return Result.ADD_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.ADD_ERROR;
+        }
+    }
+
+    /**
+     * 修改菜单
+     * @param permissionVo
+     * @return
+     */
+    @RequestMapping("updateMenu")
+    public Result updateMenu(PermissionVo permissionVo) {
+        try {
+            this.permissionService.updateById(permissionVo);
+            return Result.UPDATE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.UPDATE_ERROR;
+        }
+    }
+
+    /**
+     * 查询是否有子节点 用于删除
+     */
+    @RequestMapping("checkIsParentTree")
+    public Result checkIsParentTree(PermissionVo permissionVo){
+        Result rs  = null;
+        QueryWrapper<Permission> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("pid", permissionVo.getId());
+        List<Permission> list = this.permissionService.list(queryWrapper);
+        if(list.size()>0) {
+            rs = new Result(1,"有子节点");
+        }else {
+            rs = new Result(0,"无子节点");
+        }
+        return rs;
+    }
+
+    /**
+     * 删除菜单
+     * 注：删除两个表
+     * @param permissionVo
+     * @return
+     */
+    @RequestMapping("deleteMenuById")
+    public Result deleteMenuById(PermissionVo permissionVo) {
+        try {
+            permissionService.delPermission(permissionVo.getId());
+            return Result.DELETE_SUCCESS;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.DELETE_ERROR;
+        }
+    }
 }

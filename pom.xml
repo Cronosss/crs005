@@ -26,6 +26,7 @@
         <druid.version>1.1.18</druid.version>
         <log4j.version>1.2.17</log4j.version>
         <hutool.version>4.6.6</hutool.version>
+        <lang3.version>3.9</lang3.version>
     </properties>
 
     <dependencies>
@@ -123,6 +124,12 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool.version}</version>
+        </dependency>
+
+        <!-- commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
         </dependency>
 
     </dependencies>
