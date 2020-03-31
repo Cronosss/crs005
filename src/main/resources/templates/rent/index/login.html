@@ -2,9 +2,11 @@
 <html lang="en" class="page-fill">
     <head>
         <meta charset="UTF-8">
-        <title>车辆租用平台</title>
+        <title>租车线上管理系统</title>
         <link rel="shortcut icon" href="/resources/images/favicon.ico" type="image/x-icon"/>
         <link rel="stylesheet" href="/resources/css/oksub.css"/>
+        <style>
+        </style>
     </head>
     <body class="page-fill">
         <div class="page-fill" id="login">
@@ -18,16 +20,17 @@
                     <label for="password">密码</label>
                     <input type="password" lay-verify="required|password" name="passWord" placeholder="请输入密码" autocomplete="off" id="password" class="layui-input">
                 </div>
-                <div class="layui-form-item input-item" id="imgCode">
-                    <label for="code">验证码</label>
-                    <input type="text" placeholder="请输入验证码" name="code" autocomplete="off" id="code" class="layui-input">
-                    <img src="/sys/getCode" onclick="this.src=this.src+'?'">
+                <div class="layui-form-item input-item" style="display: flex;">
+                    <label for="authCode">验证码</label>
+                    <input type="text" lay-verify="required" name="code" placeholder="请输入验证码"
+                           id="authCode" autocomplete="off" maxlength="8" class="layui-input">
+                    <img src="/login/getCode" onclick="this.src=this.src+'?'">
                 </div>
                 <div class="layui-form-item">
                     <button class="layui-btn layui-block" lay-filter="login" lay-submit="">登录</button>
                 </div>
                <div class="login-link">
-                  <a href="./register.html">注册</a>
+                  <a href="/rent/register">注册</a>
                   <a href="./forget.html">忘记密码?</a>
                </div>
             </form>
@@ -35,13 +38,9 @@
         <!--js逻辑-->
         <script src="/resources/lib/layui/layui.js"></script>
         <script>
-            layui.use(["form", "okGVerify", "okUtils", "okMock", "okLayer"], function () {
+            layui.use(["form", "jquery"], function () {
                 let form = layui.form;
                 let $ = layui.jquery;
-                let okGVerify = layui.okGVerify;
-                let okUtils = layui.okUtils;
-                let okMock = layui.okMock;
-                let okLayer = layui.okLayer;
 
                 /**
                  * 数据校验
@@ -65,9 +64,9 @@
                         if(rs.code != 200){
                             layer.msg(rs.msg);
                         }else{
-                            //跳转到templates/system/index/index.html页面
+                            //跳转到templates/rent/index/index.html页面
                             layer.msg(rs.msg);
-                            location.href="/sys/toIndex";
+                            location.href="/rent/index";
                         }
                     });
                     return false;

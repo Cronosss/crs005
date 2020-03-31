@@ -8,7 +8,9 @@ spring:
       url: jdbc:mysql://127.0.0.1:3306/rent005?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
       username: root
       password: root
+      ##设置最大连接数
       max-active: 20
+      ##设置等待时间
       max-wait: 5000
       initial-size: 1
       filters: stat,log4j,wall
@@ -19,7 +21,9 @@ spring:
         enabled: true
         login-username: root
         login-password: 123456
-        allow: 
+        ##白名单
+        allow:
+        ##黑名单
         deny: 
         url-pattern: /druid/*
   #thymeleaf的配置 
@@ -42,15 +46,19 @@ mybatis-plus:
     banner: true
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    
+
 #shiro的配置
 shiro:
   hash-algorithm-name: md5
   hash-iterations: 3
   anon-urls:
   - /index.html*
-  - /sys/toLogin*
+  - /rent/login*
+  - /rent/register*
+  - /user/addUser
   - /login/login*
+  ##注意添加验证码过滤 ┭┮﹏┭┮
+  - /login/getCode
   - /resources/**
   login-url: /index.html
   log-out-url: /login/logout*

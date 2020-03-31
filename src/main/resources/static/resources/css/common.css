@@ -82,7 +82,7 @@
 /**颜色**/
 .bg-white{background:#fff!important}
 .col-white{color:#fff!important}
-.childrenBody{padding:15px;background-color:#f1f2f7}
+.childrenBody{padding:15px}
 .ok-card-list{padding:15px}
 .ok-card-list .ok-big-font{font-size:36px;color:#666;line-height:36px;padding:5px 0 10px;overflow:hidden;text-overflow:ellipsis;word-break:break-all;white-space:nowrap}
 

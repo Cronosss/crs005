@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan(basePackages= {"ww.rent005.sys.mapper"})
+@MapperScan(basePackages= {"ww.rent005.rent.mapper"})
 public class Rent005Application {
 
     public static void main(String[] args) {

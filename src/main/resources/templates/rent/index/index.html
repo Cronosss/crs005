@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>车辆租用平台</title>
+        <title>租车线上管理系统</title>
         <link rel="shortcut icon" href="/resources/images/favicon.ico" type="image/x-icon"/>
         <link rel="stylesheet" href="/resources/css/okadmin.css">
     </head>
@@ -45,13 +45,12 @@
 
                     <li class="no-line layui-nav-item">
                         <a href="javascript:">
-                            <img src="/resources/images/avatar.png" class="layui-nav-img">
-                            bobi
+                            <img  class="layui-nav-img indexImg">
+                            <span id="indexLoginName" style="color:gray;"></span>
                         </a>
                         <dl id="userInfo" class="layui-nav-child">
-                            <dd><a lay-id="u-1" href="javascript:" data-url="/resources/pages/member/user.html">个人中心<span class="layui-badge-dot"></span></a></dd>
-                            <dd><a lay-id="u-2" href="javascript:" data-url="/resources/pages/member/user-info.html">基本资料</a></dd>
-                            <dd><a lay-id="u-3" href="javascript:" data-url="/resources/pages/member/user-pwd.html">安全设置</a></dd>
+                            <dd><a lay-id="u-2" href="javascript:" data-url="/rent/toUserInfo">基本资料</a></dd>
+                            <dd><a lay-id="u-3" href="javascript:" data-url="/rent/toUserPwd">密码设置</a></dd>
                             <dd>
                                 <hr/>
                             </dd>
@@ -65,17 +64,17 @@
             <!--左侧导航区域-->
             <div class="layui-side layui-side-menu okadmin-bg-20222A ok-left">
                 <div class="layui-side-scroll okadmin-side">
-                    <div class="okadmin-logo">ok-admin v2.0</div>
+                    <div class="okadmin-logo">租车线上管理系统1.0</div>
                     <div class="user-photo">
                         <a class="img" title="我的头像">
-                            <img src="/resources/images/avatar.png" class="userAvatar">
+                            <img class="userAvatar indexImg">
                         </a>
-                        <p>你好！<span class="userName">XXX</span>, 欢迎登录</p>
+                        <p id="indexHello"><!--<span class="userName">XXX</span>--></p>
                     </div>
                     <!--左侧导航菜单-->
                     <!--<ul class="layui-nav okadmin-nav okadmin-bg-20222A layui-nav-tree">
                         <li class="layui-nav-item layui">
-                            <a href="javascript:" lay-id="1" data-url="/sys/toConsole">
+                            <a href="javascript:" lay-id="1" data-url="/rent/toConsole">
                                 <i is-close=false class="ok-icon">&#xe654;</i>
                                 控制台
                             </a>
@@ -113,7 +112,7 @@
 
                     <div id="tabContent" class="layui-tab-content ok-tab-content">
                         <div class="layui-tab-item layui-show">
-                            <iframe src='/sys/toConsole' frameborder="0" scrolling="yes" width="100%" height="100%"></iframe>
+                            <iframe src='/rent/toConsole' frameborder="0" scrolling="yes" width="100%" height="100%"></iframe>
                         </div>
                     </div>
                 </div>
@@ -121,12 +120,31 @@
 
             <!--底部信息-->
             <div class="layui-footer okadmin-text-center">
-                Copyright ©2016-©2020 WW
+                Copyright ©2016-©2020 CUIT-NETWORK-2016-WW
             </div>
         </div>
         <div class="yy"></div>
         <!--js逻辑-->
         <script src="/resources/lib/layui/layui.js"></script>
         <script src="/resources/js/okadmin.js"></script>
+        <script type="text/javascript">
+            layui.use(['jquery'], function () {
+                let $ = layui.jquery;
+                getLangDate();
+                function getLangDate(){
+                    var dateObj = new Date(); //表示当前系统时间的Date对象
+                    var hour = dateObj.getHours(); //当前系统时间的小时值
+                    var timeValue = "" +((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午" ); //当前时间属于上午、晚上还是下午
+                    var user = null;
+                    $.post("/login/getLogin",function(rs){
+                        user = rs.data;
+                        document.getElementById("indexHello").innerHTML = user.userName+","+timeValue+"好";
+                        document.getElementById("indexLoginName").innerHTML = " "+user.userName+" ";
+                        //头像初始化
+                        $('.indexImg').attr('src',"/upload/downloadPhoto?path="+user.img+"&type=photo");
+                    });
+                }
+            })
+        </script>
     </body>
 </html>

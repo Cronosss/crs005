@@ -11,8 +11,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/css/oksub.css">
     <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
-    <link rel="stylesheet" href="/resources/css/public.css" media="all" />
     <link rel="stylesheet" href="/resources/layui_ext/dtree/dtree.css">
     <link rel="stylesheet" href="/resources/layui_ext/dtree/font/dtreefont.css">
 
@@ -23,27 +23,36 @@
 
     </head>
     <body class="childrenBody">
-    <div class="layui-container">
-        <!-- 搜索条件开始 -->
-        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-            <legend>查询条件</legend>
-        </fieldset>
-        <form class="layui-form" method="post" id="searchForm">
-            <div class="layui-form-item">
-                <div class="layui-inline">
-                    <label class="layui-form-label">菜单名称</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="title" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-inline">
-                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal
-                        layui-icon layui-icon-search" id="doSearch">搜索</button>
-                    <button type="reset" class="layui-btn layui-btn-warm
-                        layui-btn-sm layui-icon layui-icon-refresh">重置</button>
-                </div>
+        <div class="ok-body">
+            <!--面包屑导航区域-->
+            <div class="ok-body-breadcrumb">
+                <span class="layui-breadcrumb" style="visibility: visible;">
+                    <a><cite>系统管理</cite></a>
+                    <span lay-separator>/</span>
+                    <a><cite>菜单管理</cite></a>
+                </span>
+                <a class="layui-btn layui-btn-sm" href="javascript:location.replace(location.href);" title="刷新">
+                    <i class="layui-icon layui-icon-refresh"></i>
+                </a>
             </div>
-        </form>
+            <div class="layui-row">
+                <form class="layui-form layui-col-md12 ok-search" method="post" id="searchForm">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <label class="layui-form-label">菜单名称</label>
+                            <div class="layui-input-inline">
+                                <input type="text" name="title" autocomplete="off" class="layui-input">
+                            </div>
+                        </div>
+                        <div class="layui-inline">
+                            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal
+                                layui-icon layui-icon-search" id="doSearch">搜索</button>
+                            <button type="reset" class="layui-btn layui-btn-warm
+                                layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         <!-- 搜索条件结束 -->
 
         <!-- 数据表格开始 -->

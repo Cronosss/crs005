@@ -11,66 +11,82 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/css/oksub.css">
     <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
-    <link rel="stylesheet" href="/resources/css/public.css" media="all" />
-
 </head>
 <body class="childrenBody">
-<div class="layui-container">
-    <!-- 搜索条件开始 -->
-    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>查询条件</legend>
-    </fieldset>
-    <form class="layui-form" method="post" id="searchForm">
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">用户名</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="userName" autocomplete="off" class="layui-input">
+<div class="ok-body">
+    <!--面包屑导航区域-->
+    <div class="ok-body-breadcrumb">
+        <span class="layui-breadcrumb" style="visibility: visible;">
+            <a><cite>系统管理</cite></a>
+            <span lay-separator>/</span>
+            <a><cite>角色管理</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-sm" href="javascript:location.replace(location.href);" title="刷新">
+            <i class="layui-icon layui-icon-refresh"></i>
+        </a>
+    </div>
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 ok-search" method="post" id="searchForm">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="userName" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户称呼</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="nickName" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">所在地址</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="address" autocomplete="off" class="layui-input">
+                    </div>
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">用户称呼</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="nickName" autocomplete="off" class="layui-input">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户电话</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="phone" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户邮箱</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="email" autocomplete="off" class="layui-input">
+                    </div>
                 </div>
             </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">所在地址</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="address" autocomplete="off" class="layui-input">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户性别</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="sex" value="1" title="男">
+                        <input type="radio" name="sex" value="0" title="女">
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <div class="layui-inline">
-                <label class="layui-form-label">用户电话</label>
-                <div class="layui-input-inline">
-                    <input type="text" name="phone" autocomplete="off" class="layui-input">
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户类型</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="type" value="1" title="管理员">
+                        <input type="radio" name="type" value="2" title="普通用户">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">用户性别</label>
-                <div class="layui-input-inline">
-                    <input type="radio" name="sex" value="1" title="男">
-                    <input type="radio" name="sex" value="0" title="女">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <label class="layui-form-label">用户类型</label>
-                <div class="layui-input-inline">
-                    <input type="radio" name="type" value="1" title="管理员">
-                    <input type="radio" name="type" value="2" title="普通用户">
-                </div>
-            </div>
-            <div class="layui-inline">
-                <button type="button" class="layui-btn layui-btn-sm layui-btn-normal
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal
                         layui-icon layui-icon-search" id="doSearch">搜索</button>
-                <button type="reset" class="layui-btn layui-btn-warm
+                    <button type="reset" class="layui-btn layui-btn-warm
                         layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+                </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
     <!-- 搜索条件结束 -->
 
     <!-- 数据表格开始 -->
@@ -91,13 +107,13 @@
                     <label class="layui-form-label">用户名</label>
                     <div class="layui-input-inline">
                         <input type="hidden" name="userId">
-                        <input type="text" name="userName" lay-verify="required" autocomplete="off" class="layui-input"  placeholder="请输入账号名称">
+                        <input type="text" name="userName" id="userName" lay-verify="required" autocomplete="off" class="layui-input"  placeholder="请输入用户名">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">用户称呼</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="nickName" lay-verify="required" autocomplete="off" class="layui-input"  placeholder="请输入用户名称">
+                        <input type="text" name="nickName" lay-verify="required" autocomplete="off" class="layui-input"  placeholder="请输入用户称呼">
                     </div>
                 </div>
             </div>
@@ -105,7 +121,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">所在地址</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="address" lay-verify="required" autocomplete="off" class="layui-input"  placeholder="请输入身份ID">
+                        <input type="text" name="address" lay-verify="required" autocomplete="off" class="layui-input"  placeholder="请输入所在地址">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -117,12 +133,20 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
+                    <label class="layui-form-label">用户邮箱</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="email" lay-verify="required|email" value="ww19681@qq.com" autocomplete="off" class="layui-input"  placeholder="请输入用户邮箱">
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">用户性别</label>
                     <div class="layui-input-inline">
                         <input type="radio" name="sex" value="1" checked="checked" title="男">
                         <input type="radio" name="sex" value="0" title="女">
                     </div>
                 </div>
+            </div>
+            <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">是否可用</label>
                     <div class="layui-input-inline">
@@ -130,8 +154,6 @@
                         <input type="radio" name="available" value="0" title="不可用">
                     </div>
                 </div>
-            </div>
-            <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">用户类型</label>
                     <div class="layui-input-inline">
@@ -176,8 +198,6 @@
         var form = layui.form;
         var layer = layui.layer;
         var table = layui.table;
-        var laydate = layui.laydate;
-        var dtree = layui.dtree;
 
         tbIns = table.render({
             elem: '#test',//lay-filter对应值 渲染目标对象
@@ -195,6 +215,7 @@
                 {field:'nickName', title:'用户称呼',  width:120,align:'center'},
                 {field:'address', title:'所在地址',width:170,align:'center'},
                 {field:'phone', title:'用户电话',width:140,align:'center'},
+                {field:'email', title:'用户邮箱',width:160,align:'center'},
                 {field:'sex', title:'性别',align:'center',width:60,templet:function(res){
                         return res.sex=='1'?'<font color=blue>男</font>':'<font color=green>女</font>';
                     }},
@@ -302,6 +323,8 @@
                 content:$("#saveOrUpdateDiv"),
                 area:['720px','400px'],
                 success:function () {
+                    //修改框用户名为可禁用状态
+                    $("#userName").attr("readonly","readonly");
                     form.val("dataFrm",data);
                     url = "/user/updateUser";
                 }
@@ -369,11 +392,15 @@
             //序列化表单数据
             var params = $("#dataFrm").serialize();
             $.post(url,params,function (data) {
-                layer.msg(data.msg,{icon:1,time:500,});
-                //关闭弹出层
-                layer.close(layerIndex);
-                //刷新数据表格
-                tbIns.reload();
+                if(data.code>0){
+                    layer.msg(data.msg,{icon:1,time:500,});
+                    //关闭弹出层
+                    layer.close(layerIndex);
+                    //刷新数据表格
+                    tbIns.reload();
+                }else {
+                    layer.msg(data.msg,{icon:2,time:1000,});
+                }
             })
         });
         //批量删除

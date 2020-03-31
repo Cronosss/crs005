@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="ww.rent005.sys.mapper.RoleMapper">
+<mapper namespace="ww.rent005.rent.mapper.RoleMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="ww.rent005.sys.entity.Role">
+    <resultMap id="BaseResultMap" type="ww.rent005.rent.entity.Role">
         <id column="id" property="id" />
         <result column="name" property="name" />
         <result column="remark" property="remark" />
@@ -32,7 +32,7 @@
     </delete>
 
     <!-- 根据uid查询角色信息 -->
-    <select id="findUserRoleByUid" resultType="ww.rent005.sys.entity.Role">
+    <select id="findUserRoleByUid" resultType="ww.rent005.rent.entity.Role">
         select r.* from tb_role r inner join tb_role_user ru on r.id = ru.rid
         where r.available = #{available} and ru.uid=#{uid} ;
     </select>

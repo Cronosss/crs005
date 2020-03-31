@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" class="page-fill">
+<head>
+   <meta charset="UTF-8">
+   <title>租车线上管理系统</title>
+   <link rel="shortcut icon" href="/resources/images/favicon.ico" type="image/x-icon"/>
+   <link rel="stylesheet" href="/resources/css/oksub.css"/>
+   <style>
+      #login form.layui-form{
+         margin: 0;
+         transform: translate(-50%,-50%);
+      }
+      .register .tit {
+         padding-top: 15px;
+         text-align: center;
+         font-size: 18px;
+      }
+      .register .code-box {
+         display: flex;
+      }
+   </style>
+</head>
+<body class="page-fill">
+<div class="page-fill register" id="login">
+   <form class="layui-form " id="dataFrm">
+      <div class="layui-form-item tit">注册中心</div>
+      <div class="layui-form-item input-item">
+         <label for="username">用户名</label>
+         <input type="text" lay-verify="required" name="userName" placeholder="请输入用户名" autocomplete="off" id="userName"
+                class="layui-input">
+      </div>
+      <div class="layui-form-item input-item">
+         <label for="passWord">密码</label>
+         <input type="password" lay-verify="required|password" value="123456" name="passWord" placeholder="请输入密码" autocomplete="off"
+                id="passWord" class="layui-input">
+      </div>
+      <div class="layui-form-item input-item">
+         <label for="comPassWord">确认密码</label>
+         <input type="password" lay-verify="required|comPassWord" value="123456" name="comPassWord" placeholder="请确认密码" autocomplete="off"
+                id="comPassWord" class="layui-input">
+      </div>
+      <div class="layui-form-item input-item">
+         <label for="phone">输入手机号</label>
+         <input type="text" lay-verify="required|phone" name="phone" value="13555555555" placeholder="请输入手机号"
+                autocomplete="off" id="phone" maxlength="11" class="layui-input">
+      </div>
+      <div class="layui-form-item input-item">
+         <label for="email">输入邮箱</label>
+         <input type="text" lay-verify="required|email" name="email" value="ww19681@qq.com" placeholder="请输入邮箱"
+                autocomplete="off" id="email" class="layui-input">
+      </div>
+      <div class="layui-form-item input-item" style="display: flex;">
+         <label for="authCode">验证码</label>
+         <input type="text" lay-verify="required" name="code" placeholder="请输入验证码"
+                id="authCode" autocomplete="off" maxlength="8" class="layui-input">
+         <img src="/login/getCode" onclick="this.src=this.src+'?'">
+      </div>
+      <div class="layui-form-item">
+         <button class="layui-btn layui-block" lay-filter="login" lay-submit="">注册</button>
+      </div>
+      <div class="login-link">
+         <a href="/rent/login">返回登录</a>
+      </div>
+   </form>
+</div>
+<!--js逻辑-->
+<script src="/resources/lib/layui/layui.js"></script>
+<script>
+   layui.use(["form", "okGVerify", "okLayer"], function () {
+      let form = layui.form;
+      let $ = layui.jquery;
+      let okGVerify = layui.okGVerify;
+      let okLayer = layui.okLayer;
+      let regPhone = /^[1][0-9]{10}$/;/**手机号验证**/
+      let setInter = '';/**定时器对象*/
+      let second = 60;//设置时间
+      /**
+       * 初始化验证码
+       */
+      // let verifyCode = new okGVerify("#captchaImg");
+
+      /**
+       * 数据校验
+       */
+      form.verify({
+         passWord: [/^[\S]{6,12}$/, "密码必须6到12位，且不能出现空格"],
+         phone: [
+            regPhone,
+            '输入的手机号格式不正确，请重新输入'
+         ],
+         comPassWord: function (val) {
+            let passWord = $("#passWord").val();
+            return passWord == val ? '' : "两次密码不一致";
+         }
+      });
+
+      /**
+       * 表单提交
+       */
+      form.on("submit(login)",function(){
+         var params = $("#dataFrm").serialize();
+         var btn =  $(this);
+         //设置注册按钮  为不可点击
+         btn.text("注册中...").attr("disabled","disabled").addClass("layui-disabled");
+         $.post("/user/addUser",params,function(rs){
+            //设置登录按钮 恢复可点击   在前端防止 重复点击
+            btn.text("注册").attr("disabled",false).removeClass("layui-disabled");
+            if(rs.code != 200){
+               layer.msg(rs.msg);
+            }else{
+               //跳转到templates/rent/index/index.html页面
+               layer.msg(rs.msg);
+               location.href="/rent/login";
+            }
+         });
+         return false;
+      })
+
+      /**
+       * 表单input组件单击时
+       */
+      $("#login .input-item .layui-input").click(function (e) {
+         e.stopPropagation();
+         $(this).addClass("layui-input-focus").find(".layui-input").focus();
+      });
+
+      /**
+       * 表单input组件获取焦点时
+       */
+      $("#login .layui-form-item .layui-input").focus(function () {
+         $(this).parent().addClass("layui-input-focus");
+      });
+
+      /**
+       * 表单input组件失去焦点时
+       */
+      $("#login .layui-form-item .layui-input").blur(function () {
+         $(this).parent().removeClass("layui-input-focus");
+         if ($(this).val() != "") {
+            $(this).parent().addClass("layui-input-active");
+         } else {
+            $(this).parent().removeClass("layui-input-active");
+         }
+      });
+
+
+   });
+</script>
+</body>
+</html>

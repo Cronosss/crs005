@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="ww.rent005.sys.mapper.PermissionMapper">
+<mapper namespace="ww.rent005.rent.mapper.PermissionMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="ww.rent005.sys.entity.Permission">
+    <resultMap id="BaseResultMap" type="ww.rent005.rent.entity.Permission">
         <id column="id" property="id" />
         <result column="pid" property="pid" />
         <result column="type" property="type" />
@@ -28,7 +28,7 @@
 
 
     <!-- 根据rid查询拥有的权限 -->
-    <select id="findRolePermissionsByRid" resultType="ww.rent005.sys.entity.Permission">
+    <select id="findRolePermissionsByRid" resultType="ww.rent005.rent.entity.Permission">
         select p.* from tb_permission p inner join tb_role_permission rp on p.id=rp.pid
         where p.available = #{available} and rp.rid=#{rid} ;
     </select>

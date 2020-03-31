@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>基本资料</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/resources/css/oksub.css">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+
+<style>
+    #imgShow{width:80px;height:80px;margin:0 30px}
+</style>
+</head>
+<body class="childrenBody user-info">
+<!--面包屑导航区域-->
+    <div class="ok-body-breadcrumb">
+                <span class="layui-breadcrumb" style="visibility: visible;">
+                    <a><cite>账号管理</cite></a>
+                    <span lay-separator>/</span>
+                    <a><cite>基本信息</cite></a>
+                </span>
+        <a class="layui-btn layui-btn-sm" href="javascript:location.replace(location.href);" title="刷新">
+            <i class="layui-icon layui-icon-refresh"></i>
+        </a>
+    </div>
+    <form class="layui-form  layui-form-pane ok-form" id="dataFrm"  lay-filter="dataFrm">
+        <div class="user_left">
+            <div class="layui-form-item">
+                <label class="layui-form-label">头像</label>
+                <div class="layui-upload-list" id="imgDiv">
+                    <!-- 显示上传的图片 -->
+                    <img class="layui-upload-img" id="imgShow">
+                    <!-- 保存当前显示图片的地址 赋值使用 -->
+                    <input type="hidden" name="img" id="img">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户名</label>
+                <div class="layui-input-block">
+                    <input type="hidden" name="userId">
+                    <input type="text" id="userName" name="userName" disabled class="layui-input layui-disabled">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户昵称</label>
+                <div class="layui-input-block">
+                    <input type="text" id="nickName" name="nickName" placeholder="请输入用户昵称" lay-verify="required" class="layui-input infoContent">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系电话</label>
+                <div class="layui-input-block">
+                    <input type="phone" id="phone" name="phone" placeholder="请输入联系电话" lay-verify="required|phone" class="layui-input infoContent">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">联系邮箱</label>
+                <div class="layui-input-block">
+                    <input type="email" id="email" name="email" placeholder="请输入联系邮箱" lay-verify="required|email" class="layui-input infoContent">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">所在地址</label>
+                <div class="layui-input-block">
+                    <input type="text" id="address" name="address" placeholder="请输入所在地址"  class="layui-input infoContent">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">用户性别</label>
+                <div class="layui-input-block">
+                    <input type="radio" name="sex" value="1" checked="checked" title="男">
+                    <input type="radio" name="sex" value="0" title="女">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="margin-left: 5%;">
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" id="save">立即修改</button>
+                <button type="button" class="layui-btn layui-btn-primary" id="resetInfo">重置</button>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript" src="/resources/layui/layui.js"></script>
+    <script type="text/javascript">
+        layui.use(['form', 'layer', 'upload', 'jquery'], function () {
+            var form = layui.form;
+            var layer = layui.layer;
+            //文件上传模块
+            var upload = layui.upload;
+            var $ = layui.jquery;
+            var $form = $('form');
+            var user = null;
+
+            $.post("/login/getLogin",function(rs){
+                user = rs.data;
+                form.val("dataFrm",user);
+                //此处不显示用户类型 避免权限被修改
+
+
+                //头像初始化
+                $('#imgShow').attr('src',"/upload/downloadPhoto?path="+user.img+"&type=photo");
+                //保存路径到对象中 用以保存/更新
+                $('#img').val(user.img);
+                $('#imgDiv').css("background","#fff");
+
+            });
+
+            //重置表单
+            $("#resetInfo").click(function() {
+                $(".infoContent").val('');
+            });
+
+
+            //普通图片上传
+            //上传缩略图
+            //这里上传的文件结尾均以-temp结尾
+            upload.render({
+                elem: '#imgShow',
+                url: '/upload/uploadPhoto',
+                method : "post",
+                acceptMime:'images/*',
+                field:"mf",
+                done: function(res, index, upload){
+                    //回显图片
+                    $('#imgShow').attr('src',"/upload/downloadPhoto?path="+res.data+"&type=photo");
+                    //保存路径到对象中 用以保存/更新
+                    $('#img').val(res.data);
+                    $('#imgDiv').css("background","#fff");
+                }
+            });
+
+
+            //信息提交
+            $("#save").click(function() {
+                //序列化表单数据
+                var params = $("#dataFrm").serialize();
+                $.post("/user/updateUser",params,function (data) {
+                    if(data.code>0){
+                        var index = layer.msg(data.msg,{icon:1,time:2000,});
+                        setTimeout(function () {
+                            layer.close(index);
+                            //父页面直接刷新
+                            window.parent.location.reload();
+                        }, 2000);
+                    }else {
+                        layer.msg(data.msg,{icon:2,time:2000,});
+                    }
+                })
+            });
+        });
+    </script>
+</body>
+</html>

@@ -12,7 +12,7 @@
     <artifactId>rent005</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>rent005</name>
-    <description>车辆租用平台</description>
+    <description>租车线上管理系统</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,6 +27,7 @@
         <log4j.version>1.2.17</log4j.version>
         <hutool.version>4.6.6</hutool.version>
         <lang3.version>3.9</lang3.version>
+        <commons-io.version>2.6</commons-io.version>
     </properties>
 
     <dependencies>
@@ -130,6 +131,19 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
+        </dependency>
+
+        <!--分页-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>5.1.4</version>
         </dependency>
 
     </dependencies>
