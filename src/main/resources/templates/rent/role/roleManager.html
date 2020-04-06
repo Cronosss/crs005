@@ -305,11 +305,15 @@
             //序列化表单数据
             var params = $("#dataFrm").serialize();
             $.post(url,params,function (data) {
-                layer.msg(data.msg,{icon:1,time:500,});
-                //关闭弹出层
-                layer.close(layerIndex);
-                //刷新数据表格
-                tbIns.reload();
+                if(data.code==200){
+                    layer.msg(data.msg,{icon:1,time:2000,});
+                    //关闭弹出层
+                    layer.close(layerIndex);
+                    //刷新数据表格
+                    tbIns.reload();
+                }else {
+                    layer.msg(data.msg,{icon:2,time:2000,});
+                }
             })
         });
         //批量删除

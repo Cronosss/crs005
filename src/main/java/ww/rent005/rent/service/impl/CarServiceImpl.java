@@ -30,4 +30,15 @@ public class CarServiceImpl extends ServiceImpl<CarMapper, Car> implements CarSe
     public List<Car> findAllCar(CarVo carVo) {
         return this.baseMapper.findAllCar(carVo);
     }
+
+    @Override
+    public Car findCarById(String carId) {
+        return this.baseMapper.findCarById(carId);
+    }
+
+    @Override
+    public Car findCarInfoByCarNum(String carNum) {
+        return this.baseMapper.findCarInfoByCarNum(carNum);
+    }
+
 }

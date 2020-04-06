@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>车辆管理</title>
+    <title>车辆租用</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta http-equiv="Access-Control-Allow-Origin" content="*">
@@ -21,7 +21,7 @@
         <span class="layui-breadcrumb" style="visibility: visible;">
             <a><cite>基础管理</cite></a>
             <span lay-separator>/</span>
-            <a><cite>车辆管理</cite></a>
+            <a><cite>业务管理</cite></a>
         </span>
         <a class="layui-btn layui-btn-sm" href="javascript:location.replace(location.href);" title="刷新">
             <i class="layui-icon layui-icon-refresh"></i>
@@ -285,21 +285,15 @@
 </div>
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/html" id="toolbarTop">
-    <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="add">增加</button>
-        <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="deleteBatch">批量删除</button>
-        <button type="button" class="layui-btn layui-btn-normal
-                        layui-btn-sm layui-icon layui-icon-file-b" id="exportDemo">模板下载</button>
-        <button type="button" class="layui-btn layui-btn-warm
-                        layui-btn-sm layui-icon layui-icon-download-circle" id="importData">导入</button>
-        <button type="button" class="layui-btn layui-btn-warm
-                        layui-btn-sm layui-icon layui-icon-upload-drag" id="exportData">导出</button>
-    </div>
+
 </script>
     <script type="text/html" id="barRight">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        {{#  if(d.rentStatus ==0){ }}
+        <a class="layui-btn layui-btn-xs" lay-event="doRent">起租</a>
+        {{#  } else { }}
+        <a class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="doRent">起租</a>
+        {{#  } }}
         <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="lookInfo">查看详情</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
 
     <script>
@@ -310,8 +304,6 @@
             var form = layui.form;
             var layer = layui.layer;
             var table = layui.table;
-            //文件上传模块
-            var upload = layui.upload;
 
             tbIns = table.render({
                 elem: '#test',//lay-filter对应值 渲染目标对象
@@ -361,44 +353,17 @@
                 });
             });
 
-            //插入和修改
-            //监听头部工具栏事件
-            table.on("toolbar(test)",function (obj) {
-                switch(obj.event){
-                    case 'add':
-                        openAddCar();
-                        break;
-                    case 'deleteBatch':
-                        deleteBatch();
-                        break;
-                };
-            });
-
             //监听行工具事件
             table.on('tool(test)', function(obj){
                 var data = obj.data; //获得当前行数据
                 var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
 
-                if(layEvent === 'del'){ //删除
-                    doDeleteCar(data);
-                } else if(layEvent === 'edit'){ //编辑
-                    openUpdateCar(data);
-                } else if(layEvent==='lookInfo'){//查看大图
+                if(layEvent === 'doRent'){ //编辑
+                    openCarRent(data);
+                } else if(layEvent==='lookInfo'){//查看
                     openCarInfo(data);
                 }
             });
-
-            //删除
-            function doDeleteCar(data){
-                layer.confirm('确定删除车牌号为 '+data.carNum+' 的车辆吗?', function(){
-                    //向服务端发送删除指令
-                    $.post("/car/delCar?id="+data.carId,function(obj) {
-                        layer.msg(obj.msg,{icon:1,time:1000,});
-                        //刷新数据表格
-                        tbIns.reload();
-                    });
-                });
-            }
 
             //查看详情
             function openCarInfo(data){
@@ -422,10 +387,10 @@
             //先声明弹出层组件序号 便于之后关闭
             var layerIndex;
             //打开添加页面
-            function openAddCar(){
+            function openCarRent(){
                 layerIndex = layer.open({
                     type:1,
-                    title:"添加车辆",
+                    title:"车辆租用",
                     content:$("#saveOrUpdateDiv"),
                     area:['710px','555px'],
                     success:function (index) {
@@ -437,23 +402,6 @@
                         $("#carImgShow").attr("src","/upload/downloadPhoto?path=default-car.png&type=car");
                         $("#carImg").val("default-car.png");//如果上传了图片会覆盖该路径
                         url = "/car/addCar";
-                    }
-                });
-            }
-            //打开修改页面
-            function openUpdateCar(data){
-                layerIndex = layer.open({
-                    type:1,
-                    title:"修改车辆",
-                    content:$("#saveOrUpdateDiv"),
-                    area:['710px','555px'],
-                    success:function () {
-                        form.val("dataFrm",data);
-                        $("#nickName").val(data.user.nickName);
-                        $("#rentUserId").val(data.user.userId);
-                        //获取图片路径
-                        $("#carImgShow").attr("src","/upload/downloadPhoto?path="+data.carImg+"&type=car");
-                        url = "/car/updateCar";
                     }
                 });
             }
@@ -473,50 +421,6 @@
                         layer.msg(data.msg,{icon:2,time:2000,});
                     }
                 })
-            });
-            //批量删除
-            function deleteBatch() {
-                //获取数据行
-                var checkStatus = table.checkStatus('test');
-                var data = checkStatus.data;
-                if(data==""){
-                    layer.msg("请选择删除选项!",{icon:2,time:1000,});
-                    return false;
-                }
-                var params="";
-                $.each(data,function (index, item) {
-                    if(index==0){
-                        params=params+"ids="+item.carId;
-                    }else {
-                        params=params+"&ids="+item.carId;
-                    }
-                });
-                layer.confirm('真的删除这些车辆么?', function(){
-                    //向服务端发送删除指令
-                    $.post("/car/delBatchCar",params,function(obj) {
-                        layer.msg(obj.msg,{icon:1,time:500,});
-                        //刷新数据表格
-                        tbIns.reload();
-                    });
-                });
-            }
-
-            //上传图片
-            //上传缩略图
-            //这里上传的文件结尾均以-temp结尾
-            upload.render({
-                elem: '#carImgDiv',
-                url: '/upload/uploadCarPhoto',
-                method : "post",
-                acceptMime:'images/*',
-                field:"mf",
-                done: function(res, index, upload){
-                    //回显图片
-                    $('#carImgShow').attr('src',"/upload/downloadPhoto?path="+res.data+"&type=car");
-                    //保存路径到对象中 用以保存/更新
-                    $('#carImg').val(res.data);
-                    $('#carImgDiv').css("background","#fff");
-                }
             });
         });
     </script>

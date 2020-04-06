@@ -1,6 +1,5 @@
 package ww.rent005.rent.common;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -16,6 +15,7 @@ public class RandomUtils {
 
     private static SimpleDateFormat sdf1=new SimpleDateFormat("yyyyMMddHHmmssSSS");
     private static SimpleDateFormat sdf2=new SimpleDateFormat("yyyyMM");
+    private static SimpleDateFormat sdf3=new SimpleDateFormat("yyyyMMdd");
 
     private static String chars = "abcdefghijklmnopqrstuvwxyz";
 
@@ -24,15 +24,33 @@ public class RandomUtils {
     //生成随机ID值 -用于UserId
     public static String getRandomId(){
         String randomId = Character.toString(chars.charAt((int)(Math.random() * 26))).toUpperCase();
-        return randomId+sdf1.format(new Date());
+        return "UU_"+sdf1.format(new Date())+randomId;
     }
 
     //获取随机名称 -用于昵称
     public static String getRandomNickName(){
-        StringBuffer sb = new StringBuffer(10);
+        StringBuffer sb = new StringBuffer();
         for(int i=0;i<5;i++){
             sb.append(Character.toString(chars.charAt((int)(Math.random() * 26))).toUpperCase());
         }
+        sb.append(random.nextInt(9000)+1000);
+        return sb.toString();
+    }
+
+    //获取随机Id -用于汽车Id
+    public static String getRandomCarId(){
+        StringBuffer sb = new StringBuffer(10);
+        sb.append("CC_"+sdf3.format(new Date()));
+        sb.append(Character.toString(chars.charAt((int)(Math.random() * 26))).toUpperCase());
+        sb.append(random.nextInt(9000)+1000);
+        return sb.toString();
+    }
+
+    //获取随机Id -用于订单Id
+    public static String getRandomOrderId(){
+        StringBuffer sb = new StringBuffer(10);
+        sb.append("OO_"+sdf3.format(new Date()));
+        sb.append(Character.toString(chars.charAt((int)(Math.random() * 26))).toUpperCase());
         sb.append(random.nextInt(9000)+1000);
         return sb.toString();
     }

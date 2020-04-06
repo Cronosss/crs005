@@ -143,5 +143,60 @@ public class PageController {
         return "rent/customer/customerManager";
     }
 
+    /**
+     * 至订单管理页面
+     * @return
+     */
+    @RequestMapping("toOrderManager")
+    public String toOrderManager(){
+        return "rent/order/orderManager";
+    }
+
+    /**
+     * 至回执单管理页面
+     * @return
+     */
+    @RequestMapping("toReturnManager")
+    public String toReturnManager(){
+        return "rent/return/returnManager";
+    }
+
+    /**
+     * 至用户建议管理页面
+     * @return
+     */
+    @RequestMapping("toUserBackManager")
+    public String toUserBackManager(){
+        return "rent/back/userBackManager";
+    }
+
+    /**
+     * 至车辆故障管理页面
+     * @return
+     */
+    @RequestMapping("toCarBackManager")
+    public String toCarBackManager(){
+        return "rent/back/carBackManager";
+    }
+
+    /**
+     * 至租车页面
+     * @return
+     */
+    @RequestMapping("toCarRentManager")
+    public String toCarRentManager(){
+        return "rent/work/carRentManager";
+    }
+
+    /**
+     * 至还车页面
+     * @return
+     */
+    @RequestMapping("toCarReturnManager")
+    public String toCarReturnManager(){
+        return "rent/work/carReturnManager";
+    }
+
+
 
 }

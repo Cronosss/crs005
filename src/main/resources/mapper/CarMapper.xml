@@ -28,7 +28,7 @@
     </sql>
 
     <!-- 根据车牌号查询车辆信息 -->
-    <select id="findCarByCarNum" resultMap="BaseResultMap">
+    <select id="findCarByCarNum" resultType="integer">
         select count(*) from tb_car where car_num=#{carNum}
     </select>
 
@@ -37,6 +37,9 @@
         <include refid="Base_Column_List"/>
         from tb_car
         <where>
+            <if test="carId!=null and carId!=''">
+                and car_id like concat("%",#{carId},"%")
+            </if>
             <if test="carNum!=null and carNum!=''">
                 and car_num like concat("%",#{carNum},"%")
             </if>
@@ -60,6 +63,13 @@
             </if>
         </where>
         order by update_time desc
+    </select>
+
+    <select id="findCarById" resultType="ww.rent005.rent.entity.Car">
+        select <include refid="Base_Column_List"/> from tb_car where car_id=#{carId}
+    </select>
+    <select id="findCarInfoByCarNum" resultType="ww.rent005.rent.entity.Car">
+        select <include refid="Base_Column_List"/> from tb_car where car_num=#{carNum}
     </select>
 
 </mapper>

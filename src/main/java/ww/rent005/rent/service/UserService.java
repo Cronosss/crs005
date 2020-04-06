@@ -23,5 +23,7 @@ public interface UserService extends IService<User> {
     //查重检查
     Integer findUserByUserName(UserVo userVo);
     //查重检查
-    Integer findUserByNickName(UserVo userVo);
+    Integer findUserByNickName(String nickName);
+    //根据nickName获取id
+    User findUserIdByNickName(String nickName);
 }

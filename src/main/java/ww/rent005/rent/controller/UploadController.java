@@ -48,7 +48,7 @@ public class UploadController {
      * @throws IOException
      */
     @RequestMapping("/uploadCarPhoto")
-    public Result uploadCarPhoto(@RequestParam("file") MultipartFile file) throws IllegalStateException, IOException {
+    public Result uploadCarPhoto(@RequestParam("mf") MultipartFile file) throws IllegalStateException, IOException {
         return uploadCommon("car",file);
     }
 
@@ -106,7 +106,7 @@ public class UploadController {
         //找到文件
         //获取项目classes/static的地址
         String staticPath = ClassUtils.getDefaultClassLoader().getResource("static").getPath();
-        String urlPath = staticPath + "/resources/pictures/"+type;
+        String urlPath = staticPath + "/resources/pictures/" + type + "/" + path;
         //根据文件
         File file=new File(urlPath);
         if(file.exists()) {

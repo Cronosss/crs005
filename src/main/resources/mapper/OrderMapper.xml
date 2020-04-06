@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ww.rent005.rent.mapper.OrderMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ww.rent005.rent.entity.Order">
+        <id column="order_id" property="orderId" />
+        <result column="nick_name" property="nickName" />
+        <result column="car_num" property="carNum" />
+        <result column="day_count" property="dayCount" />
+        <result column="order_price" property="orderPrice" />
+        <result column="order_deposit" property="orderDeposit" />
+        <result column="total_price" property="totalPrice" />
+        <result column="order_status" property="orderStatus" />
+        <result column="is_over" property="isOver" />
+        <result column="begin_time" property="beginTime" />
+        <result column="end_time" property="endTime" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        order_id, nick_name, car_num, day_count, order_price, order_deposit, total_price, order_status, is_over, begin_time, end_time, create_time
+    </sql>
+    <select id="findAllOrders" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_order
+        <where>
+            <if test="orderId!=null and orderId!=''">
+                and order_id like concat("%",#{orderId},"%")
+            </if>
+            <if test="nickName!=null and nickName!=''">
+                and nick_name like concat("%",#{nickName},"%")
+            </if>
+            <if test="carNum!=null and carNum!=''">
+                and car_num like concat("%",#{carNum},"%")
+            </if>
+            <if test="orderStatus!=null">
+                and order_status = #{orderStatus}
+            </if>
+            <if test="isOver!=null">
+                and is_over = #{isOver}
+            </if>
+            <if test="startTime!=null">
+                and begin_time >= #{startTime}
+            </if>
+            <if test="endOfTime!=null">
+                and begin_time <![CDATA[<=]]> #{endOfTime}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+</mapper>

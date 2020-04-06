@@ -33,7 +33,10 @@ spring:
 #      web-stat-filter: 
 #        enabled: true
 #        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
-
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
 #配置mybatisplus
@@ -46,7 +49,11 @@ mybatis-plus:
     banner: true
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
 #shiro的配置
 shiro:
   hash-algorithm-name: md5

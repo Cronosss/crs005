@@ -296,18 +296,22 @@
                 //序列化表单数据
                 var params = $("#dataFrm").serialize();
                 $.post(url,params,function (data) {
-                    layer.msg(data.msg,{icon:1,time:500,});
-                    //关闭弹出层
-                    layer.close(layerIndex);
-                    //刷新数据表格
-                    tbIns.reload();
-                    //刷新左边的树
-                    //parent.leftManager.menuTree为同级树
-                    window.parent.leftManager.menuTree.reload();
-                    //刷新添加和修改的下拉树
-                    //重新加载时会带数据 此时为树spread被置为boolean类型 再次刷新时直接spread置1重新渲染
-                    //nodeId=2&parentId=1&context=XXXX&leaf=false&level=2&spread=true
-                    menuTree.reload();
+                    if(data.code==200){
+                        layer.msg(data.msg,{icon:1,time:1000,});
+                        //关闭弹出层
+                        layer.close(layerIndex);
+                        //刷新数据表格
+                        tbIns.reload();
+                        //刷新左边的树
+                        //parent.leftManager.menuTree为同级树
+                        window.parent.leftManager.menuTree.reload();
+                        //刷新添加和修改的下拉树
+                        //重新加载时会带数据 此时为树spread被置为boolean类型 再次刷新时直接spread置1重新渲染
+                        //nodeId=2&parentId=1&context=XXXX&leaf=false&level=2&spread=true
+                        menuTree.reload();
+                    }else {
+                        layer.msg(data.msg,{icon:2,time:2000,});
+                    }
                 })
             });
 

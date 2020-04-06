@@ -18,6 +18,11 @@ public interface CarMapper extends BaseMapper<Car> {
 
     //根据车牌号查询
     Integer findCarByCarNum(String carNum);
+
+    //根据车牌号查询
+    Car findCarInfoByCarNum(String carNum);
     //查询所有车辆信息
     List<Car> findAllCar(CarVo carVo);
+    //根据id查询车辆信息
+    Car findCarById(String carId);
 }

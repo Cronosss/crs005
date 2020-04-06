@@ -55,9 +55,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Integer findUserByNickName(UserVo userVo) {
+    public Integer findUserByNickName(String nickName) {
         QueryWrapper<User> qw=new QueryWrapper<>();
-        qw.eq("nick_name", userVo.getNickName());
+        qw.eq("nick_name", nickName);
         return this.getBaseMapper().selectCount(qw);
+    }
+
+    @Override
+    public User findUserIdByNickName(String nickName) {
+        QueryWrapper<User> qw=new QueryWrapper<>();
+        qw.eq("nick_name", nickName);
+        return this.getBaseMapper().selectOne(qw);
     }
 }

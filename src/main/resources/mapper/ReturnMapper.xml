@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ww.rent005.rent.mapper.ReturnMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ww.rent005.rent.entity.Return">
+        <id column="return_id" property="returnId" />
+        <result column="order_id" property="orderId" />
+        <result column="car_num" property="carNum" />
+        <result column="nick_name" property="nickName" />
+        <result column="estimated_price" property="estimatedPrice" />
+        <result column="actual_price" property="actualPrice" />
+        <result column="more_info" property="moreInfo" />
+        <result column="ad_type" property="adType" />
+        <result column="advice" property="advice" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        return_id, order_id, car_num, nick_name, estimated_price, actual_price, more_info, ad_type, advice, create_time
+    </sql>
+
+</mapper>

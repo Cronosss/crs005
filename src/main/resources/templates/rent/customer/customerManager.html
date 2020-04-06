@@ -83,14 +83,14 @@
         <form class="layui-form" lay-filter="dataFrm" id="dataFrm">
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">客户账号</label>
+                    <label class="layui-form-label">用户名</label>
                     <div class="layui-input-inline">
                         <input type="hidden" name="userId">
                         <input type="text" name="userName" id="userName" lay-verify="required" autocomplete="off" class="layui-input"  placeholder="请输入账号名称">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">客户称呼</label>
+                    <label class="layui-form-label">客户昵称</label>
                     <div class="layui-input-inline">
                         <input type="text" name="nickName" lay-verify="required" autocomplete="off" class="layui-input"  placeholder="请输入用户名称">
                     </div>
@@ -112,17 +112,31 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
+                    <label class="layui-form-label">用户邮箱</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="email" lay-verify="required|email" value="ww19681@qq.com" autocomplete="off" class="layui-input"  placeholder="请输入用户邮箱">
+                    </div>
+                </div>
+                <div class="layui-inline">
                     <label class="layui-form-label">客户性别</label>
                     <div class="layui-input-inline">
                         <input type="radio" name="sex" value="1" checked="checked" title="男">
                         <input type="radio" name="sex" value="0" title="女">
                     </div>
                 </div>
+            </div>
+            <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">是否可用</label>
                     <div class="layui-input-inline">
                         <input type="radio" name="available" value="1" title="可用"  checked="checked">
                         <input type="radio" name="available" value="0" title="不可用">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户类型</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="type" value="2" title="普通用户" checked="checked">
                     </div>
                 </div>
             </div>
@@ -143,11 +157,11 @@
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="add">增加</button>
         <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="deleteBatch">批量删除</button>
-        <button type="button" class="layui-btn layui-btn-warm
+        <button type="button" class="layui-btn layui-btn-normal
                         layui-btn-sm layui-icon layui-icon-file-b" id="exportDemo">模板下载</button>
-        <button type="button" class="layui-btn layui-btn-normal
+        <button type="button" class="layui-btn layui-btn-warm
                         layui-btn-sm layui-icon layui-icon-download-circle" id="importData">导入</button>
-        <button type="button" class="layui-btn layui-btn-normal
+        <button type="button" class="layui-btn layui-btn-warm
                         layui-btn-sm layui-icon layui-icon-upload-drag" id="exportData">导出</button>
     </div>
 </script>
@@ -181,10 +195,11 @@
                 [   //列数据
                     {type:'checkbox', fixed:'left'},
                     {field:'userId', title:'客户编号', width:180,sort:true, align:'center'},
-                    {field:'userName', title:'客户账号', width:120,align:'center'},
-                    {field:'nickName', title:'客户称呼',  width:120,align:'center'},
+                    {field:'userName', title:'用户名', width:120,align:'center'},
+                    {field:'nickName', title:'客户昵称',  width:120,align:'center'},
                     {field:'address', title:'所在地址',width:150,align:'center'},
                     {field:'phone', title:'联系电话',width:130,align:'center'},
+                    {field:'email', title:'联系邮箱',width:180,align:'center'},
                     {field:'sex', title:'性别',align:'center',width:60,templet:function(res){
                             return res.sex=='1'?'<font color=blue>男</font>':'<font color=green>女</font>';
                         }},
@@ -273,6 +288,7 @@
                 content:$("#saveOrUpdateDiv"),
                 area:['720px','400px'],
                 success:function (index) {
+                    $("#userName").removeAttr("readonly");
                     //情况表单数据
                     //Jquery没有reset 变成dom调用reset
                     $("#dataFrm")[0].reset();
@@ -301,11 +317,15 @@
             //序列化表单数据
             var params = $("#dataFrm").serialize();
             $.post(url,params,function (data) {
-                layer.msg(data.msg,{icon:1,time:500,});
-                //关闭弹出层
-                layer.close(layerIndex);
-                //刷新数据表格
-                tbIns.reload();
+                if(data.code==200){
+                    layer.msg(data.msg,{icon:1,time:500,});
+                    //关闭弹出层
+                    layer.close(layerIndex);
+                    //刷新数据表格
+                    tbIns.reload();
+                }else {
+                    layer.msg(data.msg,{icon:2,time:2000,});
+                }
             })
         });
         //批量删除

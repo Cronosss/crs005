@@ -19,4 +19,8 @@ public interface CarService extends IService<Car> {
     Integer findCarByCarNum(String carNum);
     //查询所有车辆信息
     List<Car> findAllCar(CarVo carVo);
+    //根据id查询车辆信息
+    Car findCarById(String carId);
+    //根据车牌号查询
+    Car findCarInfoByCarNum(String carNum);
 }

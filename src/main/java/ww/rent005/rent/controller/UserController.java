@@ -55,7 +55,7 @@ public class UserController {
                 return new Result(-1,"该用户名被占用!",null);
             }
             //该昵称已存在
-            if(userService.findUserByNickName(userVo)>0){
+            if(userService.findUserByNickName(userVo.getNickName())>0){
                 return new Result(-1,"该昵称已被占用,请换个昵称吧!",null);
             }
             //这里区分用户管理和用户注册
@@ -142,8 +142,11 @@ public class UserController {
     @RequestMapping("updateUser")
     public Result updateUser(UserVo userVo){
         try {
+            User userTemp = this.userService.getById(userVo.getUserId());
             //该昵称已存在
-            if(userService.findUserByNickName(userVo)>0){
+            //如果前后昵称未改变则跳过；前后昵称改变判断是否存在
+            if((!userTemp.getNickName().equals(userVo.getNickName()))&&(userService.findUserByNickName(userVo.getNickName())>0)){
+                System.out.println(userTemp.getNickName().equals(userVo.getNickName()));
                 return new Result(-1,"该昵称已被占用,请换个昵称吧!",null);
             }
             if(userVo.getPassWord()!=null&&userVo.getPassWord()!=""){
@@ -162,7 +165,6 @@ public class UserController {
                 //保存路径
                 userVo.setImg(filePath);
                 //删除之前图片
-                User userTemp = this.userService.getById(userVo.getUserId());
                 UploadController.deleteFileByPath(userTemp.getImg(),"photo");
             }
             userVo.setUpdateTime(new Date());

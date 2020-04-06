@@ -13,89 +13,87 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @ClassName: Car
- * @Author: cronos
- * @Date: 2020/3/30 14:23
- * @Version: 1.0
- **/
+ * <p>
+ * 
+ * </p>
+ *
+ * @author Cronos
+ * @since 2020-04-02
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("tb_car")
-public class Car implements Serializable {
+@TableName("tb_order")
+public class Order implements Serializable {
 
     private static final long serialVersionUID=1L;
 
     /**
-     * 汽车id
+     * 订单id
      */
-    @TableId(value = "car_id", type = IdType.INPUT)
-    private String carId;
+    @TableId(value = "order_id", type = IdType.INPUT)
+    private String orderId;
 
     /**
-     * 汽车牌照
+     * 租用者
+     */
+    private String nickName;
+
+    /**
+     * 汽车车牌
      */
     private String carNum;
 
     /**
-     * 汽车类型
+     * 租用天数
      */
-    private String carType;
+    private Integer dayCount;
 
     /**
-     * 汽车市值
+     * 租用价格
      */
-    private Double buyPrice;
+    private Double orderPrice;
 
     /**
-     * 租用价格/天
+     * 押金金额
      */
-    private Double rentPrice;
+    private Double orderDeposit;
 
     /**
-     * 租用押金/天
+     * 预计金额
      */
-    private Double depositPrice;
+    private Double totalPrice;
 
     /**
-     * 租用状态
+     * 是否归还 已还/未还
      */
-    private Integer rentStatus;
+    private Integer orderStatus;
 
     /**
-     * 车辆颜色
+     * 是否逾期 正常/逾期
      */
-    private String carColor;
+    private Integer isOver;
 
     /**
-     * 汽车描述
-     */
-    private String description;
-
-    /**
-     * 汽车图片
-     */
-    private String carImg;
-
-    /**
-     * 车主id
-     */
-    private String rentUserId;
-
-    /**
-     * 更新时间
+     * 租借时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    @TableField(value = "update_time")
-    private Date updateTime;
+    @TableField(value = "begin_time")
+    private Date beginTime;
 
     /**
-     * 发布时间
+     * 预还时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @TableField(value = "end_time")
+    private Date endTime;
+
+    /**
+     * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     @TableField(value = "create_time")
     private Date createTime;
 
-    //用于联合查询车主信息
-    private User user;
+
 }
