@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ww.rent005.rent.mapper.MessageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ww.rent005.rent.entity.Message">
+        <id column="mes_id" property="mesId" />
+        <result column="mes_type" property="mesType" />
+        <result column="mes_content" property="mesContent" />
+        <result column="mes_from" property="mesFrom" />
+        <result column="mes_to" property="mesTo" />
+        <result column="mes_status" property="mesStatus" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        mes_id, mes_type, mes_content, mes_from, mes_to, mes_status, create_time
+    </sql>
+
+</mapper>

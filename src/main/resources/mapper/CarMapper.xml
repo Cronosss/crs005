@@ -14,6 +14,7 @@
         <result column="car_color" property="carColor" />
         <result column="description" property="description" />
         <result column="car_img" property="carImg" />
+        <result column="is_repair" property="isRepair" />
         <result column="rent_user_id" property="rentUserId" />
         <result column="update_time" property="updateTime" />
         <result column="create_time" property="createTime" />
@@ -24,7 +25,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        car_id, car_num, car_type, buy_price, rent_price, deposit_price, rent_status,car_color, description, car_img, rent_user_id, update_time, create_time
+        car_id, car_num, car_type, buy_price, rent_price, deposit_price,is_repair, rent_status,car_color, description, car_img, rent_user_id, update_time, create_time
     </sql>
 
     <!-- 根据车牌号查询车辆信息 -->
@@ -55,6 +56,9 @@
             <if test="rentStatus!=null">
                 and rent_status = #{rentStatus}
             </if>
+            <if test="isRepair!=null">
+                and is_repair = #{isRepair}
+            </if>
             <if test="startPrice!=null">
                 and rent_price >= #{startPrice}
             </if>
@@ -62,14 +66,27 @@
                 and rent_price <![CDATA[<=]]> #{endPrice}
             </if>
         </where>
-        order by update_time desc
+        order by is_repair,rent_status,update_time desc
     </select>
 
     <select id="findCarById" resultType="ww.rent005.rent.entity.Car">
         select <include refid="Base_Column_List"/> from tb_car where car_id=#{carId}
     </select>
+    <select id="findCarByIdReturnMap" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from tb_car where car_id=#{carId}
+    </select>
     <select id="findCarInfoByCarNum" resultType="ww.rent005.rent.entity.Car">
         select <include refid="Base_Column_List"/> from tb_car where car_num=#{carNum}
+    </select>
+    <select id="findAllCarByIds" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/> from tb_car
+        <where>
+            car_id in
+            <foreach item="carId" collection="carIds"
+                     open="(" separator="," close=")">
+                #{carId}
+            </foreach>
+        </where>
     </select>
 
 </mapper>

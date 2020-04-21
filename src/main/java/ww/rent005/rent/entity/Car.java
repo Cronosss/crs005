@@ -98,4 +98,7 @@ public class Car implements Serializable {
 
     //用于联合查询车主信息
     private User user;
+
+    //用于显示车辆是否需要维护
+    private Integer isRepair;
 }

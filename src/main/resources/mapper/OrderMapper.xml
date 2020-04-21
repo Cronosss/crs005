@@ -7,6 +7,9 @@
         <id column="order_id" property="orderId" />
         <result column="nick_name" property="nickName" />
         <result column="car_num" property="carNum" />
+        <result column="car_id" property="carId" />
+        <result column="return_id" property="returnId" />
+        <result column="user_id" property="userId" />
         <result column="day_count" property="dayCount" />
         <result column="order_price" property="orderPrice" />
         <result column="order_deposit" property="orderDeposit" />
@@ -20,7 +23,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        order_id, nick_name, car_num, day_count, order_price, order_deposit, total_price, order_status, is_over, begin_time, end_time, create_time
+        order_id, nick_name, return_id,car_num,car_id, user_id, day_count, order_price, order_deposit, total_price, order_status, is_over, begin_time, end_time, create_time
     </sql>
     <select id="findAllOrders" resultMap="BaseResultMap">
         select
@@ -36,20 +39,29 @@
             <if test="carNum!=null and carNum!=''">
                 and car_num like concat("%",#{carNum},"%")
             </if>
+            <if test="userId!=null and userId!=''">
+                and user_id = #{userId}
+            </if>
             <if test="orderStatus!=null">
                 and order_status = #{orderStatus}
             </if>
             <if test="isOver!=null">
                 and is_over = #{isOver}
             </if>
+            <if test="returnId!=null and returnId!=''">
+                and return_id = #{returnId}
+            </if>
             <if test="startTime!=null">
                 and begin_time >= #{startTime}
             </if>
             <if test="endOfTime!=null">
-                and begin_time <![CDATA[<=]]> #{endOfTime}
+                and end_time <![CDATA[<=]]> #{endOfTime}
             </if>
         </where>
-        order by create_time desc
+        order by order_status,create_time desc
+    </select>
+    <select id="findOrdersByCarId" resultType="ww.rent005.rent.entity.Order">
+        select <include refid="Base_Column_List"/> from tb_order where car_id=#{carId}
     </select>
 
 </mapper>

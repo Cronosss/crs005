@@ -17,4 +17,6 @@ import java.util.List;
 public interface OrderService extends IService<Order> {
 
     List<Order> findAllOrders(OrderVo orderVo);
+
+    List<Order> findOrdersByCarId(String carId);
 }

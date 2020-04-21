@@ -19,7 +19,7 @@
     <!--面包屑导航区域-->
     <div class="ok-body-breadcrumb">
         <span class="layui-breadcrumb" style="visibility: visible;">
-            <a><cite>基础管理</cite></a>
+            <a><cite>信息系统</cite></a>
             <span lay-separator>/</span>
             <a><cite>车辆管理</cite></a>
         </span>
@@ -61,6 +61,13 @@
                     <div class="layui-input-inline">
                         <input type="radio" name="rentStatus" value="1" title="已出租">
                         <input type="radio" name="rentStatus" value="0" title="未出租">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">车辆状态</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="isRepair" value="1" title="故障">
+                        <input type="radio" name="isRepair" value="0" title="正常">
                     </div>
                 </div>
             </div>
@@ -161,10 +168,29 @@
                         </div>
                         <div class="layui-col-md6 layui-col-xs5">
                             <div class="layui-form-item">
+                                <label class="layui-form-label">联系电话</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="phone" id="phone1" lay-verify="required|phone" class="layui-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
                                 <label class="layui-form-label">出租状态</label>
                                 <div class="layui-input-block">
                                     <input type="radio" name="rentStatus" value="1" title="已租">
                                     <input type="radio" name="rentStatus" value="0" title="未租" checked="checked">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">车辆状态</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="isRepair" value="1" title="故障">
+                                    <input type="radio" name="isRepair" value="0" title="正常" checked="checked">
                                 </div>
                             </div>
                         </div>
@@ -262,10 +288,29 @@
                     </div>
                     <div class="layui-col-md6 layui-col-xs5">
                         <div class="layui-form-item">
+                            <label class="layui-form-label">联系电话</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="phone" id="phone2" class="layui-input" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md6 layui-col-xs5">
+                        <div class="layui-form-item">
                             <label class="layui-form-label">出租状态</label>
                             <div class="layui-input-block">
                                 <input type="radio" name="rentStatus" value="1" title="已租" disabled>
                                 <input type="radio" name="rentStatus" value="0" title="未租" checked="checked" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6 layui-col-xs5">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">车辆状态</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="isRepair" value="1" title="故障" disabled>
+                                <input type="radio" name="isRepair" value="0" title="正常" checked="checked" disabled>
                             </div>
                         </div>
                     </div>
@@ -318,7 +363,7 @@
                 url:'/car/loadCars', //数据接口
                 title: '车辆表', //数据导出的标题
                 page: true, //是否启用分页
-                height:"full-140",
+                height:"full-200",
                 toolbar:"#toolbarTop", //表格工具条
                 defaultToolbar:['filter'],    //右侧工具栏
                 cols: [
@@ -333,6 +378,9 @@
                     {field:'description', title:'车辆描述',width:240,align:'center'},
                     {field:'carColor', title:'车辆颜色', width:100,align:'center'},
                     {field:'rentPrice', title:'车辆市值', sort:true,width:105,align:'center'},
+                    {field:'isRepair', title:'车辆状态',sort:true,align:'center',width:105,templet:function(res){
+                            return res.isRepair=='1'?'<font color=red>故障</font>':'<font color=green>正常</font>';
+                        }},
                     {field:'rentStatus', title:'出租状态',sort:true,align:'center',width:105,templet:function(res){
                             return res.rentStatus=='1'?'<font color=red>已租</font>':'<font color=green>未租</font>';
                         }},
@@ -406,10 +454,11 @@
                     type:1,
                     title:"查看车辆详情",
                     content:$("#carInfoShowDiv"),
-                    area:['710px','555px'],
+                    area:['720px','600px'],
                     success:function () {
                         form.val("carInfo",data);
                         $("#nickName2").val(data.user.nickName);
+                        $("#phone2").val(data.user.phone);
                         //获取图片路径
                         $("#carImgShow2").attr("src","/upload/downloadPhoto?path="+data.carImg+"&type=car");
                         }
@@ -427,7 +476,7 @@
                     type:1,
                     title:"添加车辆",
                     content:$("#saveOrUpdateDiv"),
-                    area:['710px','555px'],
+                    area:['710px','610px'],
                     success:function (index) {
                         //情况表单数据
                         //Jquery没有reset 变成dom调用reset
@@ -446,10 +495,11 @@
                     type:1,
                     title:"修改车辆",
                     content:$("#saveOrUpdateDiv"),
-                    area:['710px','555px'],
+                    area:['710px','610px'],
                     success:function () {
                         form.val("dataFrm",data);
                         $("#nickName").val(data.user.nickName);
+                        $("#phone1").val(data.user.phone);
                         $("#rentUserId").val(data.user.userId);
                         //获取图片路径
                         $("#carImgShow").attr("src","/upload/downloadPhoto?path="+data.carImg+"&type=car");

@@ -19,9 +19,9 @@
     <!--面包屑导航区域-->
     <div class="ok-body-breadcrumb">
         <span class="layui-breadcrumb" style="visibility: visible;">
-            <a><cite>基础管理</cite></a>
+            <a><cite>业务系统</cite></a>
             <span lay-separator>/</span>
-            <a><cite>业务管理</cite></a>
+            <a><cite>车辆租用</cite></a>
         </span>
         <a class="layui-btn layui-btn-sm" href="javascript:location.replace(location.href);" title="刷新">
             <i class="layui-icon layui-icon-refresh"></i>
@@ -34,6 +34,7 @@
                     <label class="layui-form-label">车辆编号</label>
                     <div class="layui-input-inline">
                         <input type="text" name="carId" autocomplete="off" class="layui-input">
+                        <input type="hidden" name="isRepair" value="0">
                     </div>
                 </div>
                 <div class="layui-inline">
@@ -97,54 +98,19 @@
                     <div class="layui-row layui-col-space10">
                         <div class="layui-col-md6 layui-col-xs5">
                             <div class="layui-form-item">
-                                <label class="layui-form-label">挂载牌照</label>
+                                <label class="layui-form-label">订单编号</label>
                                 <div class="layui-input-block">
-                                    <input type="hidden" name="carId">
-                                    <input type="text" name="carNum" id="carNum" class="layui-input" lay-verify="required" placeholder="请输入牌照">
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">车辆类型</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="carType" class="layui-input" lay-verify="required" placeholder="请输入类型">
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">车辆颜色</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="carColor" class="layui-input" lay-verify="required" placeholder="请输入颜色">
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">车辆市值</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="buyPrice" class="layui-input" lay-verify="required|number" placeholder="请输入市值">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layui-col-md6 layui-col-xs5">
-                            <div class="layui-upload-list thumbBox mag0 magt3" id="carImgDiv">
-                                <!-- 显示上传的图片 -->
-                                <img class="layui-upload-img thumbImg" id="carImgShow" style="width: 282px;height: 200px;margin: 5px 20px;">
-                                <!-- 保存当前显示图片的地址 赋值使用 -->
-                                <input type="hidden" name="carImg" id="carImg">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="layui-row layui-col-space10">
-                        <div class="layui-col-md6 layui-col-xs5">
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">出租价格</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="rentPrice" class="layui-input" lay-verify="required|number" placeholder="请输入租价 / 天">
+                                    <input type="text" name="orderId" class="layui-input" lay-verify="required" readonly>
+                                    <input type="hidden" name="userId" readonly>
+                                    <input type="hidden" name="carId" readonly>
                                 </div>
                             </div>
                         </div>
                         <div class="layui-col-md6 layui-col-xs5">
                             <div class="layui-form-item">
-                                <label class="layui-form-label">出租押金</label>
+                                <label class="layui-form-label">创建时间</label>
                                 <div class="layui-input-block">
-                                    <input type="text" name="depositPrice" class="layui-input" lay-verify="required|number" placeholder="请输入押金 / 天">
+                                    <input type="text" name="createTime" class="layui-input" lay-verify="required" readonly>
                                 </div>
                             </div>
                         </div>
@@ -152,37 +118,105 @@
                     <div class="layui-row layui-col-space10">
                         <div class="layui-col-md6 layui-col-xs5">
                             <div class="layui-form-item">
-                                <label class="layui-form-label">出租用户</label>
+                                <label class="layui-form-label">汽车牌照</label>
                                 <div class="layui-input-block">
-                                    <!--使用rentUserId暂存用户信息-->
-                                    <input type="text" name="rentUserId" id="nickName" class="layui-input" lay-verify="required" placeholder="请输入昵称">
+                                    <input type="text" name="carNum" class="layui-input" lay-verify="required" readonly>
                                 </div>
                             </div>
                         </div>
                         <div class="layui-col-md6 layui-col-xs5">
                             <div class="layui-form-item">
-                                <label class="layui-form-label">出租状态</label>
+                                <label class="layui-form-label">租用用户</label>
                                 <div class="layui-input-block">
-                                    <input type="radio" name="rentStatus" value="1" title="已租">
-                                    <input type="radio" name="rentStatus" value="0" title="未租" checked="checked">
+                                    <input type="text" name="nickName" class="layui-input" lay-verify="required" readonly>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="layui-row layui-col-space10">
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">车辆描述</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="description" class="layui-input" lay-verify="required" placeholder="请输入描述">
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">租用价格/天</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="orderPrice" id="orderPrice" class="layui-input" lay-verify="required|number" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">押金价格/天</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="orderDeposit" id="orderDeposit" class="layui-input" lay-verify="required|number" readonly>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="layui-form-item" style="text-align: center;">
-                    <div class="layui-block" id="submitDiv">
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal layui-icon layui-icon-search"
-                                lay-submit="" lay-filter="doSave">保存</button>
-                        <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">租用天数</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="dayCount" id="dayCountId" readonly class="layui-input rentContent" lay-verify="number"  placeholder="请手动选择时间">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">预计金额</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="totalPrice" id="totalPriceId" class="layui-input" lay-verify="required|number" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">订单状态</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="orderStatus" value="1" title="完成" disabled>
+                                    <input type="radio" name="orderStatus" value="0" title="未完成" checked="checked" disabled>
+                                    <input type="hidden" name="orderStatus" value="0">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">是否逾期</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="isOver" value="1" title="逾期" disabled>
+                                    <input type="radio" name="isOver" value="0" title="未逾期" checked="checked" disabled>
+                                    <input type="hidden" name="isOver" value="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">起租时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="beginTime" id="startTime" lay-verify="required" placeholder="请输入起租时间"  autocomplete="off"
+                                           class="layui-input rentContent">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">预还时间</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="endTime" id="endOfTime" lay-verify="required" placeholder="请输入预还时间"  autocomplete="off"
+                                           class="layui-input rentContent">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="text-align: center;">
+                        <div class="layui-block" id="submitDiv">
+                            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal layui-icon layui-icon-search"
+                                    lay-submit="" lay-filter="doSave">保存</button>
+                            <button type="button" id="resetRentInfo" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -291,26 +325,59 @@
         {{#  if(d.rentStatus ==0){ }}
         <a class="layui-btn layui-btn-xs" lay-event="doRent">起租</a>
         {{#  } else { }}
-        <a class="layui-btn layui-btn-xs layui-btn-disabled" lay-event="doRent">起租</a>
+        <a class="layui-btn layui-btn-xs layui-btn-disabled" >起租</a>
         {{#  } }}
-        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="lookInfo">查看详情</a>
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="lookInfo">车辆详情</a>
     </script>
 
     <script>
         //先声明table组件 便于之后渲染
         var tbIns ;
-        layui.use(['jquery','form','layer','table','upload'],function () {
+        layui.use(['jquery','form','layer','table','laydate'],function () {
             var $ = layui.jquery;
             var form = layui.form;
             var layer = layui.layer;
             var table = layui.table;
+            //时间模块
+            var laydate = layui.laydate;
+            laydate.render({
+                elem:'#startTime',
+                type:'datetime',
+                done: function(value, date, endDate){
+                    var time2 = $("#endOfTime").val();
+                    countCount(value,time2);
+                }
+            });
+            laydate.render({
+                elem:'#endOfTime',
+                type:'datetime',
+                done: function(value, date, endDate){
+                    var time1 = $("#startTime").val();
+                    countCount(time1,value);
+                }
+            });
+
+            function countCount(time1,time2){
+                if (time1!=""&&time2!="") {
+                    var start = new Date(time1.replace(/-/g, "/"));
+                    var end = new Date(time2.replace(/-/g, "/"));
+                    var days = end.getTime() - start.getTime();
+                    var dayCount = Math.abs(parseInt(days / (1000 * 60 * 60 * 24)));
+                    var orderPrice = parseFloat($("#orderPrice").val());
+                    var orderDeposit = parseFloat($("#orderDeposit").val());
+                    if(dayCount!=null){
+                        $("#dayCountId").val(dayCount);
+                        $("#totalPriceId").val((orderPrice+orderDeposit)*dayCount);
+                    }
+                }
+            }
 
             tbIns = table.render({
                 elem: '#test',//lay-filter对应值 渲染目标对象
-                url:'/car/loadCars', //数据接口
+                url:'/car/loadCars?isRepair=0', //数据接口
                 title: '车辆表', //数据导出的标题
                 page: true, //是否启用分页
-                height:"full-140",
+                height:"full-200",
                 toolbar:"#toolbarTop", //表格工具条
                 defaultToolbar:['filter'],    //右侧工具栏
                 cols: [
@@ -324,13 +391,13 @@
                     }},
                     {field:'description', title:'车辆描述',width:240,align:'center'},
                     {field:'carColor', title:'车辆颜色', width:100,align:'center'},
-                    {field:'rentPrice', title:'车辆市值', sort:true,width:105,align:'center'},
                     {field:'rentStatus', title:'出租状态',sort:true,align:'center',width:105,templet:function(res){
                             return res.rentStatus=='1'?'<font color=red>已租</font>':'<font color=green>未租</font>';
                         }},
                     {field:'rentPrice', title:'租用价格/天',sort:true,width:120,align:'center'},
                     {field:'depositPrice', title:'租用押金/天',sort:true,width:120,align:'center'},
-                    {field:'user', title:'出租人',width:150,align:'center',templet:function (res) {
+                        {field:'rentPrice', title:'车辆市值', sort:true,width:105,align:'center'},
+                        {field:'user', title:'出租人',width:150,align:'center',templet:function (res) {
                             return res.user.nickName;
                         }},
                     {field:'user', title:'联系电话',width:130,align:'center',templet:function (res) {
@@ -387,23 +454,41 @@
             //先声明弹出层组件序号 便于之后关闭
             var layerIndex;
             //打开添加页面
-            function openCarRent(){
-                layerIndex = layer.open({
-                    type:1,
-                    title:"车辆租用",
-                    content:$("#saveOrUpdateDiv"),
-                    area:['710px','555px'],
-                    success:function (index) {
-                        //情况表单数据
-                        //Jquery没有reset 变成dom调用reset
-                        $("#dataFrm")[0].reset();
+            function openCarRent(data){
+                if(data.rentStatus==0){
+                    layerIndex = layer.open({
+                        type:1,
+                        title:"车辆租用",
+                        content:$("#saveOrUpdateDiv"),
+                        area:['710px','500px'],
+                        success:function (index) {
+                            //清空表单数据
+                            $("#dataFrm")[0].reset();
+                            //请求数据
+                            var carNum = data.carNum;
+                            var carId = data.carId;
+                            var rentPrice = data.rentPrice;
+                            var depositPrice = data.depositPrice;
+                            //初始化数据
+                            $.get("/order/initRentInfo",{
+                                carNum:carNum,
+                                carId:carId,
+                                orderPrice:rentPrice,
+                                orderDeposit:depositPrice
+                            },function (obj) {
+                                form.val("dataFrm",obj.data);
+                            })
+                            url = "/order/addOrder";
+                        }
+                    });
+                }
+            }
 
-                        //设置默认图片 添加默认图片地址src用于显示默认图片
-                        $("#carImgShow").attr("src","/upload/downloadPhoto?path=default-car.png&type=car");
-                        $("#carImg").val("default-car.png");//如果上传了图片会覆盖该路径
-                        url = "/car/addCar";
-                    }
-                });
+            //租用单动态数据
+            //时间空间设置
+            function resetTime(){
+                $("#startTime").val('');
+                $("#endOfTime").val('');
             }
 
             //保存数据
@@ -421,6 +506,12 @@
                         layer.msg(data.msg,{icon:2,time:2000,});
                     }
                 })
+            });
+
+
+            //重置表单
+            $("#resetRentInfo").click(function() {
+                $(".rentContent").val('');
             });
         });
     </script>

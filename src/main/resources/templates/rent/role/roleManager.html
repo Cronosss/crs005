@@ -21,7 +21,7 @@
     <!--面包屑导航区域-->
     <div class="ok-body-breadcrumb">
         <span class="layui-breadcrumb" style="visibility: visible;">
-            <a><cite>系统管理</cite></a>
+            <a><cite>权限系统</cite></a>
             <span lay-separator>/</span>
             <a><cite>角色管理</cite></a>
         </span>
@@ -142,7 +142,7 @@
             url:'/role/loadRoles', //数据接口
             title: '角色表', //数据导出的标题
             page: true, //是否启用分页
-            height:"full-140",
+            height:"full-200",
             toolbar:"#toolbarTop", //表格工具条
             defaultToolbar:['filter'],    //右侧工具栏
             cols: [
@@ -232,7 +232,7 @@
                 type:1,
                 title:"添加角色",
                 content:$("#saveOrUpdateDiv"),
-                area:['720px','400px'],
+                area:['720px','220px'],
                 success:function (index) {
                     //情况表单数据
                     //Jquery没有reset 变成dom调用reset
@@ -247,7 +247,7 @@
                 type:1,
                 title:"修改角色",
                 content:$("#saveOrUpdateDiv"),
-                area:['720px','400px'],
+                area:['720px','220px'],
                 success:function () {
                     form.val("dataFrm",data);
                     url = "/role/updateRole";

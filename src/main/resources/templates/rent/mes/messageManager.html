@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>系统信息</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/css/oksub.css">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+</head>
+<body class="childrenBody">
+<div class="ok-body">
+    <!--面包屑导航区域-->
+    <div class="ok-body-breadcrumb">
+        <span class="layui-breadcrumb" style="visibility: visible;">
+            <a><cite>系统信息</cite></a>
+            <span lay-separator>/</span>
+            <a><cite>用户中心</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-sm" href="javascript:location.replace(location.href);" title="刷新">
+            <i class="layui-icon layui-icon-refresh"></i>
+        </a>
+    </div>
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 ok-search" method="post" id="searchForm">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">反馈编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="backId" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">反馈内容</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="advice" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">反馈类型</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="adType" value="1" title="故障">
+                        <input type="radio" name="adType" value="0" title="建议">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否解决</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="isSolve" value="1" title="解决">
+                        <input type="radio" name="isSolve" value="0" title="未解决">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal
+                        layui-icon layui-icon-search" id="doSearch">搜索</button>
+                    <button type="reset" class="layui-btn layui-btn-warm
+                        layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+        <!-- 搜索条件结束 -->
+
+        <!-- 数据表格开始 -->
+        <table class="layui-hide " id="test" lay-filter="test" ></table>
+        <!-- 数据表格结束 -->
+
+        <!-- 添加和修改弹出层开始 -->
+        <div style="display: none;padding:20px 20px 0 20px;" id="saveOrUpdateDiv">
+            <form class="layui-form layui-row layui-col-space10 layui-form-pane ok-form" lay-filter="dataFrm" id="dataFrm">
+                <div class="layui-col-md12 layui-col-xs10">
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">反馈编号</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="backId" class="layui-input" lay-verify="required" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">关联编号</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="returnId" class="layui-input" lay-verify="required" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">反馈类别</label>
+                                <div class="layui-input-block">
+                                    <input type="radio" name="adType" value="1" title="故障">
+                                    <input type="radio" name="adType" value="0" title="建议">                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">反馈用户</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="userName" class="layui-input" lay-verify="required" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">反馈内容</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="advice" class="layui-input" lay-verify="required" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">补充说明</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="moreInfo" class="layui-input" lay-verify="required" >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">是否解决</label>
+                                <div class="layui-input-inline">
+                                    <input type="radio" name="isSolve" value="1" title="解决">
+                                    <input type="radio" name="isSolve" value="0" title="未解决">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">解决用户</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="solveName" class="layui-input" lay-verify="required" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-row layui-col-space10">
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">创建时间</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="dateTime" class="layui-input" lay-verify="required" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="layui-col-md6 layui-col-xs5">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">更新时间</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="updateTime" class="layui-input" lay-verify="required" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="text-align: center;" id="doContent">
+                        <div class="layui-block" id="submitDiv">
+                            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal layui-icon layui-icon-search"
+                                    lay-submit="" lay-filter="doSave">保存</button>
+                            <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- 添加和修改弹出层结束 -->
+
+    <!-- 添加和修改弹出层开始 -->
+    <!-- 添加和修改弹出层开始 -->
+    <div style="display: none;padding:20px 20px 0 20px;" id="showUserBackInfo">
+        <form class="layui-form layui-row layui-col-space10 layui-form-pane ok-form" lay-filter="infoFrm" id="infoFrm">
+            <div class="layui-col-md12 layui-col-xs10">
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md6 layui-col-xs5">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">反馈编号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="backId" class="layui-input" lay-verify="required" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6 layui-col-xs5">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">关联编号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="returnId" class="layui-input" lay-verify="required" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md6 layui-col-xs5">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">反馈类别</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="adType" value="建议" class="layui-input" lay-verify="required" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6 layui-col-xs5">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">反馈用户</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="userName" class="layui-input" lay-verify="required" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">反馈内容</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="advice" class="layui-input" lay-verify="required" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">补充说明</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="moreInfo" class="layui-input" lay-verify="required" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md6 layui-col-xs5">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">是否解决</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="isSolve" value="1" title="解决" disabled>
+                                <input type="radio" name="isSolve" value="0" title="未解决" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6 layui-col-xs5">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">解决用户</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="solveName" class="layui-input" lay-verify="required" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md6 layui-col-xs5">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">创建时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="dateTime" class="layui-input" lay-verify="required" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6 layui-col-xs5">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">更新时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="updateTime" class="layui-input" lay-verify="required" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- 添加和修改弹出层结束 -->
+</div>
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/html" id="toolbarTop">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">增加</button>
+        <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="deleteBatch">批量删除</button>
+    </div>
+</script>
+    <script type="text/html" id="barRight">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="lookInfo">查看详情</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+
+    <script>
+        //先声明table组件 便于之后渲染
+        var tbIns ;
+        layui.use(['jquery','form','layer','table'],function () {
+            var $ = layui.jquery;
+            var form = layui.form;
+            var layer = layui.layer;
+            var table = layui.table;
+
+            tbIns = table.render({
+                elem: '#test',//lay-filter对应值 渲染目标对象
+                url:'/back/loadBacksByUser', //数据接口
+                title: '反馈表', //数据导出的标题
+                page: true, //是否启用分页
+                height:"full-200",
+                toolbar:"#toolbarTop", //表格工具条
+                defaultToolbar:['filter'],    //右侧工具栏
+                cols: [
+                    [   //列数据
+                    {type:'checkbox', fixed:'left'},
+                    {field:'backId', title:'反馈编号',width:160, sort:true, align:'center'},
+                    /*{field:'returnId', title:'关联编号', width:160,sort:true, align:'center'},*/
+                    {field:'adType', title:'反馈类型',  width:120,align:'center',templet:function(res){
+                            return res.adType=='0'?"用户建议":"车辆故障";
+                        }},
+                    {field:'moreInfo', title:'补充信息',width:240,align:'center'},
+                    {field:'advice', title:'反馈内容',width:240,align:'center'},
+                    {field:'userName', title:'反馈用户', sort:true,width:160,align:'center'},
+                    {field:'isSolve', title:'是否解决', sort:true,width:105,align:'center',templet:function(res){
+                            return res.isSolve=='0'?'<font color=red>未解决</font>':'<font color=green>已解决</font>';
+                        }},
+                    {field:'solveName', title:'解决用户',sort:true, width:160,align:'center'},
+                    {field:'dateTime', title:'创建时间',sort:true,width:165,align:'center'},
+                    {field:'updateTime', title:'更新时间',sort:true,width:165,align:'center'},
+                    {fixed:'right', title:'操作', toolbar:'#barRight', width:200, align:'center'}
+                ]
+                ]
+            });
+
+            //模糊查询
+            $("#doSearch").click(function() {
+                var params = $("#searchForm").serialize();
+                tbIns.reload({
+                    //重新渲染
+                    url:"/back/loadBacksByUser?"+params,
+                    page:{curr:1}//默认跳至第一页
+                });
+            });
+
+            //插入和修改
+            //监听头部工具栏事件
+            table.on("toolbar(test)",function (obj) {
+                switch(obj.event){
+                    case 'add':
+                        openAddBack();
+                        break;
+                    case 'deleteBatch':
+                        deleteBatch();
+                        break;
+                };
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function(obj){
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+
+                if(layEvent === 'del'){ //删除
+                    doDeleteBack(data);
+                } else if(layEvent === 'edit'){ //编辑
+                    openUpdateBack(data);
+                } else if(layEvent==='lookInfo'){//查看大图
+                    openBackInfo(data);
+                }
+            });
+
+            //删除
+            function doDeleteBack(data){
+                layer.confirm('确定删除反馈编号为 '+data.backId+' 的反馈信息吗?', function(){
+                    //向服务端发送删除指令
+                    $.post("/back/delBack?id="+data.backId,function(obj) {
+                        layer.msg(obj.msg,{icon:1,time:1000,});
+                        //刷新数据表格
+                        tbIns.reload();
+                    });
+                });
+            }
+
+            //查看详情
+            function openBackInfo(data){
+                layerIndex = layer.open({
+                    type:1,
+                    title:"查看反馈详情",
+                    content:$("#showUserBackInfo"),
+                    area:['710px','450px'],
+                    success:function () {
+                        form.val("infoFrm",data);
+
+
+                        }
+                });
+            }
+
+
+            //根据url进行添加和更新
+            var url;
+            //先声明弹出层组件序号 便于之后关闭
+            var layerIndex;
+            //打开添加页面
+            function openAddBack(){
+                layerIndex = layer.open({
+                    type:1,
+                    title:"添加反馈信息",
+                    content:$("#saveOrUpdateDiv"),
+                    area:['710px','500px'],
+                    success:function (index) {
+                        //情况表单数据
+                        //Jquery没有reset 变成dom调用reset
+                        $("#dataFrm")[0].reset();
+
+
+                        url = "/back/addBack";
+                    }
+                });
+            }
+            //打开修改页面
+            function openUpdateBack(data){
+                layerIndex = layer.open({
+                    type:1,
+                    title:"修改反馈信息",
+                    content:$("#saveOrUpdateDiv"),
+                    area:['710px','500px'],
+                    success:function () {
+                        form.val("dataFrm",data);
+
+                        url = "/back/updateBack";
+                    }
+                });
+            }
+
+            //保存数据
+            form.on('submit(doSave)', function(data){
+                //序列化表单数据
+                var params = $("#dataFrm").serialize();
+                $.post(url,params,function (data) {
+                    if(data.code==200){
+                        layer.msg(data.msg,{icon:1,time:2000,});
+                        //关闭弹出层
+                        layer.close(layerIndex);
+                        //刷新数据表格
+                        tbIns.reload();
+                    }else {
+                        layer.msg(data.msg,{icon:2,time:2000,});
+                    }
+                })
+            });
+            //批量删除
+            function deleteBatch() {
+                //获取数据行
+                var checkStatus = table.checkStatus('test');
+                var data = checkStatus.data;
+                if(data==""){
+                    layer.msg("请选择删除选项!",{icon:2,time:1000,});
+                    return false;
+                }
+                var params="";
+                $.each(data,function (index, item) {
+                    if(index==0){
+                        params=params+"ids="+item.carId;
+                    }else {
+                        params=params+"&ids="+item.carId;
+                    }
+                });
+                layer.confirm('真的删除这些反馈信息么?', function(){
+                    //向服务端发送删除指令
+                    $.post("/back/delBatchBack",params,function(obj) {
+                        layer.msg(obj.msg,{icon:1,time:500,});
+                        //刷新数据表格
+                        tbIns.reload();
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>

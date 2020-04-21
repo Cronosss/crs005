@@ -186,7 +186,7 @@ layui.use(["element", "layer", "okUtils", "okTab", "okLayer"], function () {
     /**
      * 系统公告
      */
-    $(document).on("click", "#notice", noticeFun);
+/*    $(document).on("click", "#notice", noticeFun);
     !function () {
         var notice = sessionStorage.getItem("notice");
         if (notice != "true") {
@@ -220,7 +220,7 @@ layui.use(["element", "layer", "okUtils", "okTab", "okLayer"], function () {
     }
 
     function getContent() {
-    }
+    }*/
 
     $(".layui-footer button.donate").click(function () {
 

@@ -23,13 +23,23 @@ public class PageController {
     }
 
     /**
-     * 至登录界面
+     * 至注册界面
      * @return
      */
     @RequestMapping("register")
     public String toRegister(){
         return "rent/index/register";
     }
+
+    /**
+     * 至忘记密码界面
+     * @return
+     */
+    @RequestMapping("forget")
+    public String toForget(){
+        return "rent/index/forget";
+    }
+
 
     /**
      * 至首页界面
@@ -114,18 +124,21 @@ public class PageController {
         return "rent/user/userManager";
     }
 
-
+    /**
+     * 至密码修改页面
+     */
     @RequestMapping("toUserPwd")
     public String toUserPwd(){
         return "rent/user/userPwd";
     }
 
+    /**
+     * 至用户信息页面
+     */
     @RequestMapping("toUserInfo")
     public String toUserInfo(){
         return "rent/user/userInfo";
     }
-
-
 
     /**
      * 至车辆管理页面
@@ -180,6 +193,15 @@ public class PageController {
     }
 
     /**
+     * 至我的反馈页面
+     * @return
+     */
+    @RequestMapping("toMyBackManager")
+    public String toMyBackManager(){
+        return "rent/user/myBackManager";
+    }
+
+    /**
      * 至租车页面
      * @return
      */
@@ -197,6 +219,40 @@ public class PageController {
         return "rent/work/carReturnManager";
     }
 
+    /**
+     * 至类型管理页面
+     * @return
+     */
+    @RequestMapping("toTypeManager")
+    public String toTypeManager(){
+        return "rent/type/typeManager";
+    }
 
+    /**
+     * 至日志管理页面
+     * @return
+     */
+    @RequestMapping("toLogManager")
+    public String toLogManager(){
+        return "rent/log/logManager";
+    }
+
+    /**
+     * 至信息页面
+     * @return
+     */
+    @RequestMapping("toMessageManager")
+    public String toMessageManager(){
+        return "rent/mes/messageManager";
+    }
+
+    /**
+     * 至公告管理页面
+     * @return
+     */
+    @RequestMapping("toArticleManager")
+    public String toArticleManager(){
+        return "rent/article/articleManager";
+    }
 
 }

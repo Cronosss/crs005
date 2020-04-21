@@ -55,6 +55,39 @@ public class RandomUtils {
         return sb.toString();
     }
 
+    //获取随机Id -用于回执Id
+    public static String getRandomReturnId(){
+        StringBuffer sb = new StringBuffer(10);
+        sb.append("RE_"+sdf3.format(new Date()));
+        sb.append(Character.toString(chars.charAt((int)(Math.random() * 26))).toUpperCase());
+        sb.append(random.nextInt(9000)+1000);
+        return sb.toString();
+    }
+
+    //获取随机Id -用于反馈Id
+    public static String getRandomBackId(Integer type){
+        StringBuffer sb = new StringBuffer(10);
+        if(type.equals(0)){
+            //0是车辆故障 即车辆反馈
+            sb.append("AD_CAR_"+sdf3.format(new Date()));
+        }else {
+            //1为建议 即用户反馈
+            sb.append("AD_USER_"+sdf3.format(new Date()));
+        }
+        sb.append(Character.toString(chars.charAt((int)(Math.random() * 26))).toUpperCase());
+        sb.append(random.nextInt(9000)+1000);
+        return sb.toString();
+    }
+
+    //获取日志Id -用于日志Id
+    public static String getRandomLogId(String type){
+        StringBuffer sb = new StringBuffer(10);
+        sb.append("LOG_"+type+"_"+sdf3.format(new Date()));
+        sb.append(Character.toString(chars.charAt((int)(Math.random() * 26))).toUpperCase());
+        sb.append(random.nextInt(9000)+1000);
+        return sb.toString();
+    }
+
     //获取当前年月 -用于图片文件夹
     public static String getCurrentDateString() {
         return sdf2.format(new Date());

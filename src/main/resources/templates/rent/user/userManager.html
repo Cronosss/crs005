@@ -19,9 +19,9 @@
     <!--面包屑导航区域-->
     <div class="ok-body-breadcrumb">
         <span class="layui-breadcrumb" style="visibility: visible;">
-            <a><cite>系统管理</cite></a>
+            <a><cite>权限系统</cite></a>
             <span lay-separator>/</span>
-            <a><cite>角色管理</cite></a>
+            <a><cite>用户管理</cite></a>
         </span>
         <a class="layui-btn layui-btn-sm" href="javascript:location.replace(location.href);" title="刷新">
             <i class="layui-icon layui-icon-refresh"></i>
@@ -113,7 +113,7 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">用户称呼</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="nickName" lay-verify="required" autocomplete="off" class="layui-input"  placeholder="请输入用户称呼">
+                        <input type="text" name="nickName" lay-verify="required" autocomplete="off" class="layui-input userContent"  placeholder="请输入用户称呼">
                     </div>
                 </div>
             </div>
@@ -121,13 +121,13 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">所在地址</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="address" lay-verify="required" autocomplete="off" class="layui-input"  placeholder="请输入所在地址">
+                        <input type="text" name="address" lay-verify="required" autocomplete="off" class="layui-input userContent"  placeholder="请输入所在地址">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">用户电话</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="phone" lay-verify="required|phone" value="13555555555" autocomplete="off" class="layui-input"  placeholder="请输入用户电话">
+                        <input type="text" name="phone" lay-verify="required|phone" value="13555555555" autocomplete="off" class="layui-input userContent"  placeholder="请输入用户电话">
                     </div>
                 </div>
             </div>
@@ -135,12 +135,12 @@
                 <div class="layui-inline">
                     <label class="layui-form-label">用户邮箱</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="email" lay-verify="required|email" value="ww19681@qq.com" autocomplete="off" class="layui-input"  placeholder="请输入用户邮箱">
+                        <input type="text" name="email" lay-verify="required|email" value="ww19681@qq.com" autocomplete="off" class="layui-input userContent"   placeholder="请输入用户邮箱">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">用户性别</label>
-                    <div class="layui-input-inline">
+                    <div class="layui-input-inline userContent">
                         <input type="radio" name="sex" value="1" checked="checked" title="男">
                         <input type="radio" name="sex" value="0" title="女">
                     </div>
@@ -149,14 +149,14 @@
             <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">是否可用</label>
-                    <div class="layui-input-inline">
+                    <div class="layui-input-inline userContent">
                         <input type="radio" name="available" value="1" title="可用"  checked="checked">
                         <input type="radio" name="available" value="0" title="不可用">
                     </div>
                 </div>
                 <div class="layui-inline">
                     <label class="layui-form-label">用户类型</label>
-                    <div class="layui-input-inline">
+                    <div class="layui-input-inline userContent">
                         <input type="radio" name="type" value="1" title="管理员" >
                         <input type="radio" name="type" value="2" title="普通用户" checked="checked">
                     </div>
@@ -166,7 +166,7 @@
                 <div class="layui-block">
                     <button type="button" class="layui-btn layui-btn-sm layui-btn-normal layui-icon layui-icon-search"
                             lay-submit="" lay-filter="doSave">保存</button>
-                    <button type="reset" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+                    <button type="button" id="resetUser" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
                 </div>
             </div>
         </form>
@@ -204,7 +204,7 @@
             url:'/user/loadUsers', //数据接口
             title: '用户表', //数据导出的标题
             page: true, //是否启用分页
-            height:"full-140",
+            height:"full-200",
             toolbar:"#toolbarTop", //表格工具条
             defaultToolbar:['filter'],    //右侧工具栏
             cols: [
@@ -306,7 +306,7 @@
                 type:1,
                 title:"添加用户",
                 content:$("#saveOrUpdateDiv"),
-                area:['720px','400px'],
+                area:['720px','360px'],
                 success:function (index) {
                     $("#userName").removeAttr("readonly");
                     //情况表单数据
@@ -322,7 +322,7 @@
                 type:1,
                 title:"修改用户",
                 content:$("#saveOrUpdateDiv"),
-                area:['720px','400px'],
+                area:['720px','360px'],
                 success:function () {
                     //修改框用户名为可禁用状态
                     $("#userName").attr("readonly","readonly");
@@ -426,6 +426,11 @@
                 });
             });
         }
+
+        //重置表单
+        $("#resetUser").click(function() {
+            $(".userContent").val('');
+        });
     });
 
 </script>

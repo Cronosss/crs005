@@ -5,6 +5,7 @@ import ww.rent005.rent.entity.Car;
 import ww.rent005.rent.vo.CarVo;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -23,4 +24,8 @@ public interface CarService extends IService<Car> {
     Car findCarById(String carId);
     //根据车牌号查询
     Car findCarInfoByCarNum(String carNum);
+    //根据ids查询
+    List<Car> findAllCarByIds(Set<String> carIds);
+    //根据id查询车辆信息
+    Car findCarByIdReturnMap(String carId);
 }

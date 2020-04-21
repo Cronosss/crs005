@@ -9,10 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 import ww.rent005.rent.common.DataGrid;
 import ww.rent005.rent.common.RandomUtils;
 import ww.rent005.rent.common.Result;
-import ww.rent005.rent.common.WebUtils;
 import ww.rent005.rent.entity.Car;
+import ww.rent005.rent.entity.Order;
 import ww.rent005.rent.entity.User;
 import ww.rent005.rent.service.CarService;
+import ww.rent005.rent.service.OrderService;
 import ww.rent005.rent.service.UserService;
 import ww.rent005.rent.vo.CarVo;
 
@@ -37,6 +38,9 @@ public class CarController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    OrderService orderService;
     
     /**
      * 添加车辆
@@ -96,21 +100,6 @@ public class CarController {
     }
 
     /**
-     * 查询当前用户租用过的
-     * @param carVo
-     * @return
-     */
-    @RequestMapping("loadCarsByUser")
-    public DataGrid loadCarsByUser(CarVo carVo) {
-        User user = (User) WebUtils.getSession().getAttribute("user");
-        carVo.setUser(user);
-        //此处使用PageHelper分页处理 因为自动QueryWrapper不方便使用复杂SQL
-        Page<Object> page = PageHelper.startPage(carVo.getPage(), carVo.getLimit());
-        List<Car> carList = this.carService.findAllCar(carVo);
-        return new DataGrid(page.getTotal(), carList);
-    }
-
-    /**
      * 修改汽车信息
      * @param carVo
      * @return
@@ -144,6 +133,18 @@ public class CarController {
                         return new Result(-1,"该用户不存在,请重新输入!","");
                     }else {
                         carVo.setRentUserId(user.getUserId());
+                    }
+                }
+                //判断是否可以修改出租状态
+                //如果把未租改成已租 则是可以的
+                //如果把已租改成未租 则需要判断
+                if(carVo.getRentStatus()==1){
+                    List<Order> orders = this.orderService.findOrdersByCarId(carVo.getCarId());
+                    for(Order order:orders){
+                        //如果该id下存在order未完成情况 则不能修改出租状态
+                        if(order.getOrderStatus()==0){
+                            return new Result(-1,"出租状态编辑失败,该车辆已处于租用状态","");
+                        }
                     }
                 }
                 carVo.setUpdateTime(new Date());

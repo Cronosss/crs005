@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ww.rent005.rent.mapper.TypeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="ww.rent005.rent.entity.Type">
+        <id column="type_id" property="typeId" />
+        <result column="type_type" property="typeType" />
+        <result column="type_content" property="typeContent" />
+        <result column="create_time" property="createTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        type_id, type_type, type_content, create_time
+    </sql>
+    <select id="getAllTypeTypes" resultType="java.lang.String">
+        select type_type from tb_type group by type_type;
+    </select>
+    <select id="getAllTypeContents" resultType="java.lang.String">
+        select type_content from tb_type
+        <where>
+        <if test="typeType!=null and typeType!=''">
+            and type_type = #{typeType}
+        </if>
+        </where>
+        group by type_content;
+    </select>
+</mapper>

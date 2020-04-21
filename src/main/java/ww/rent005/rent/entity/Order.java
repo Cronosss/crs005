@@ -8,9 +8,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * <p>
@@ -78,6 +80,7 @@ public class Order implements Serializable {
      * 租借时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(value = "begin_time")
     private Date beginTime;
 
@@ -85,6 +88,7 @@ public class Order implements Serializable {
      * 预还时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(value = "end_time")
     private Date endTime;
 
@@ -92,8 +96,21 @@ public class Order implements Serializable {
      * 创建时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(value = "create_time")
     private Date createTime;
 
+
+    //新增字段 优化SQL
+    private String userId;
+
+    private String carId;
+
+
+    //用于接收其他属性
+    private Map<String,Object> map;
+
+    //返单id
+    private String returnId;
 
 }

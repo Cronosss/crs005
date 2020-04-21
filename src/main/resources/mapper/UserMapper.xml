@@ -22,6 +22,10 @@
     <sql id="Base_Column_List">
         user_id, user_name, pass_word, nick_name, sex, address, phone, type, img, salt, available, create_time
     </sql>
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List2">
+        user_id, user_name, nick_name, sex, address, phone, type, img, available, create_time
+    </sql>
 
     <!-- 添加用户角色中间表信息 -->
     <insert id="addRoleUser">
@@ -34,7 +38,7 @@
     </delete>
 
     <select id="findByUserId" resultMap="BaseResultMap">
-        select <include refid="Base_Column_List"/> from tb_user where user_id = #{userId}
+        select <include refid="Base_Column_List2"/> from tb_user where user_id = #{userId}
     </select>
 
 </mapper>

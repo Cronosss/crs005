@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>租车线上管理系统</title>
+        <title>车辆租用管理系统</title>
         <link rel="shortcut icon" href="/resources/images/favicon.ico" type="image/x-icon"/>
         <link rel="stylesheet" href="/resources/css/okadmin.css">
     </head>
@@ -39,7 +39,13 @@
 
                     <li class="layui-nav-item layui-hide-xs">
                         <a id="fullScreen" class=" pr10 pl10" href="javascript:">
-                            <i class="layui-icon layui-icon-screen-full"></i>
+                            <i class="layui-icon layui-icon-screen-full" title="缩放"></i>
+                        </a>
+                    </li>
+
+                    <li class="no-line layui-nav-item layui-hide-xs">
+                        <a id="message" class="flex-vc pr10 pl10" href="javascript:">
+                            <i class="ok-icon layui-icon-notice icon-head-i" title="通知"></i><cite></cite>
                         </a>
                     </li>
 
@@ -64,7 +70,7 @@
             <!--左侧导航区域-->
             <div class="layui-side layui-side-menu okadmin-bg-20222A ok-left">
                 <div class="layui-side-scroll okadmin-side">
-                    <div class="okadmin-logo">租车线上管理系统1.0</div>
+                    <div class="okadmin-logo">车辆租用管理系统1.0</div>
                     <div class="user-photo">
                         <a class="img" title="我的头像">
                             <img class="userAvatar indexImg">
@@ -138,7 +144,9 @@
                     var user = null;
                     $.post("/login/getLogin",function(rs){
                         user = rs.data;
-                        document.getElementById("indexHello").innerHTML = user.userName+","+timeValue+"好";
+                        var name = user.nickName;
+                        var sex = user.sex?"先生":"女士";
+                        document.getElementById("indexHello").innerHTML = name +" "+ sex+","+timeValue+"好";
                         document.getElementById("indexLoginName").innerHTML = " "+user.userName+" ";
                         //头像初始化
                         $('.indexImg').attr('src',"/upload/downloadPhoto?path="+user.img+"&type=photo");

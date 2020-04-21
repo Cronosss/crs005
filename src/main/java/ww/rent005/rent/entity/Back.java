@@ -31,8 +31,8 @@ public class Back implements Serializable {
     /**
      * 反馈id
      */
-    @TableId(value = "back_id", type = IdType.AUTO)
-    private Integer backId;
+    @TableId(value = "back_id", type = IdType.INPUT)
+    private String backId;
 
     /**
      * 返还单id

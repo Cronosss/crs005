@@ -8,6 +8,7 @@ import ww.rent005.rent.service.CarService;
 import ww.rent005.rent.vo.CarVo;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -39,6 +40,16 @@ public class CarServiceImpl extends ServiceImpl<CarMapper, Car> implements CarSe
     @Override
     public Car findCarInfoByCarNum(String carNum) {
         return this.baseMapper.findCarInfoByCarNum(carNum);
+    }
+
+    @Override
+    public List<Car> findAllCarByIds(Set<String> carIds) {
+        return this.baseMapper.findAllCarByIds(carIds);
+    }
+
+    @Override
+    public Car findCarByIdReturnMap(String carId) {
+        return this.baseMapper.findCarByIdReturnMap(carId);
     }
 
 }

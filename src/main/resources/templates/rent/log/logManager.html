@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>日志管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Access-Control-Allow-Origin" content="*">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="icon" href="favicon.ico">
+    <link rel="stylesheet" href="/resources/css/oksub.css">
+    <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
+</head>
+<body class="childrenBody">
+<div class="ok-body">
+    <!--面包屑导航区域-->
+    <div class="ok-body-breadcrumb">
+        <span class="layui-breadcrumb" style="visibility: visible;">
+            <a><cite>内部系统</cite></a>
+            <span lay-separator>/</span>
+            <a><cite>日志管理</cite></a>
+        </span>
+        <a class="layui-btn layui-btn-sm" href="javascript:location.replace(location.href);" title="刷新">
+            <i class="layui-icon layui-icon-refresh"></i>
+        </a>
+    </div>
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 ok-search" method="post" id="searchForm">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">日志编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="logId" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">日志内容</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="logContent" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">日志类型</label>
+                    <div class="layui-input-inline">
+                        <select name="logType" id="logTypeA" lay-verify="required">
+
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">开始时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="startTime" id="startTime" readonly="readonly"   autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">结束时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="endOfTime" id="endOfTime" readonly="readonly"  autocomplete="off"
+                               class="layui-input">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item" style="text-align: center;" >
+                <div class="layui-inline">
+                    <button type="button" class="layui-btn layui-btn-sm layui-btn-normal
+                        layui-icon layui-icon-search" id="doSearch">搜索</button>
+                    <button type="reset" class="layui-btn layui-btn-warm
+                        layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+        <!-- 搜索条件结束 -->
+
+        <!-- 数据表格开始 -->
+        <table class="layui-hide " id="test" lay-filter="test" ></table>
+        <!-- 数据表格结束 -->
+
+        <!-- 添加和修改弹出层开始 -->
+        <div style="display: none;padding:20px 20px 0 20px;" id="saveOrUpdateDiv">
+            <form class="layui-form layui-row layui-col-space10 layui-form-pane ok-form" lay-filter="dataFrm" id="dataFrm">
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-col-md6 layui-col-xs5">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">日志编号</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="logId" id="logId" class="layui-input" lay-verify="required" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6 layui-col-xs5">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">创建时间</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="createTime" id="createTime" class="layui-input" lay-verify="required" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">日志类型</label>
+                        <div class="layui-input-block">
+                            <select name="logType" class="contentInfo" id="logType" lay-verify="required" lay-filter="searchType">
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-row layui-col-space10">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">日志内容</label>
+                        <div class="layui-input-block">
+                            <textarea name="logContent" id="logContent"
+                                      class="layui-textarea contentInfo"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="text-align: center;" id="doContent">
+                    <div class="layui-block" id="submitDiv">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal layui-icon layui-icon-search"
+                                lay-submit="" lay-filter="doSave">保存</button>
+                        <button type="button" id="resetInfo" class="layui-btn layui-btn-warm layui-btn-sm layui-icon layui-icon-refresh">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- 添加和修改弹出层结束 -->
+
+    <!-- 添加和修改弹出层开始 -->
+    <!-- 添加和修改弹出层开始 -->
+    <!-- 添加和修改弹出层结束 -->
+</div>
+<script type="text/javascript" src="/resources/layui/layui.js"></script>
+<script type="text/html" id="toolbarTop">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">增加</button>
+        <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="deleteBatch">批量删除</button>
+    </div>
+</script>
+    <script type="text/html" id="barRight">
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+
+    <script>
+        //先声明table组件 便于之后渲染
+        var tbIns ;
+        layui.use(['jquery','form','layer','table','laydate'],function () {
+            var $ = layui.jquery;
+            var form = layui.form;
+            var layer = layui.layer;
+            var table = layui.table;
+            //时间模块
+            var laydate = layui.laydate;
+            laydate.render({
+                elem:'#startTime',
+                type:'datetime'
+            });
+            laydate.render({
+                elem:'#endOfTime',
+                type:'datetime'
+            });
+
+
+            tbIns = table.render({
+                elem: '#test',//lay-filter对应值 渲染目标对象
+                url:'/log/loadLogs', //数据接口
+                title: '日志表', //数据导出的标题
+                page: true, //是否启用分页
+                height:"full-200",
+                toolbar:"#toolbarTop", //表格工具条
+                defaultToolbar:['filter'],    //右侧工具栏
+                cols: [
+                    [   //列数据
+                        {type:'checkbox', fixed:'left'},
+                        {field:'logId', title:'日志编号',width:210, sort:true, align:'center'},
+                        {field:'logType', title:'日志类型',width:170,align:'center'},
+                        {field:'logContent', title:'日志内容',width:380,align:'center'},
+                        {field:'createTime', title:'创建时间',sort:true,width:165,align:'center'},
+                        {fixed:'right', title:'操作', toolbar:'#barRight', width:150, align:'center'}
+                ]
+                ],
+                //解决删除最后一行数据的分页问题
+                done:function (data, curr, count) {
+                    //不是第一页且返回数据为0则返回上一页
+                    if(curr!=1 && data.data.length==0){
+                        tbIns.reload({
+                            page:{
+                                curr:(curr-1)
+                            }
+                        })
+                    }
+                }
+            });
+
+            //初始化下拉框
+            initTypes();
+            function initTypes() {
+                $.ajax({
+                    type:'POST',
+                    url:'/type/getAllTypeContents',
+                    data:{typeType:'日志'},
+                    dataType:"json",
+                    success: function(data){
+                        var add = document.getElementById("logTypeA");
+                        var first = document.createElement("option");
+                        first.id = parseInt(-1);
+                        first.innerText = "";
+                        add.append(first);
+                        layui.form.render('select')
+                        for(var i = 0;i < data.data.length; i++){
+                            var option = document.createElement("option");
+                            option.id = i;
+                            option.innerText = data.data[i];
+                            add.append(option);
+                            layui.form.render('select')
+                        }
+                    }
+                });
+            }
+
+            function selectTypeTypesAdd(){
+                $.ajax({
+                    type:'POST',
+                    url:'/type/getAllTypeContents',
+                    data:{typeType:'日志'},
+                    dataType:"json",
+                    success: function(data){
+                        var add = document.getElementById("logType");
+                        for(var i = 0;i < data.data.length; i++){
+                            var option = document.createElement("option");
+                            if(i==0){
+                                $.get("/log/initLogInfo",{
+                                    logType:data.value
+                                },function (obj) {
+                                    var info = obj.data;
+                                    $("#logId").val(info.logId);
+                                    $("#createTime").val(info.createTime);
+                                });
+                            }
+                            option.id = i;
+                            option.innerText = data.data[i];
+                            add.append(option);
+                            layui.form.render('select')
+                        }
+                    }
+                });
+            }
+
+            function selectTypeTypesUpdate(res){
+                $.ajax({
+                    type:'POST',
+                    url:'/type/getAllTypeContents',
+                    data:{typeType:'日志'},
+                    dataType:"json",
+                    success: function(data){
+                        var add = document.getElementById("logType");
+                        var tempIndex = 0;
+                        for(var i = 0;i < data.data.length; i++){
+                            var option = document.createElement("option");
+                            if(res.logType==data.data[i]){
+                                option.setAttribute("selected",'true');
+                                /*console.log(res.typeType+" "+data.data[i]+" "+ i);*/
+                            }
+                            option.id = i;
+                            option.innerText = data.data[i];
+                            add.append(option);
+                            layui.form.render('select')
+                        }
+                    }
+                });
+                $("#typeType").val(res.typeType);
+            }
+
+            //模糊查询
+            $("#doSearch").click(function() {
+                var params = $("#searchForm").serialize();
+                tbIns.reload({
+                    //重新渲染
+                    url:"/log/loadLogs?"+params,
+                    page:{curr:1}//默认跳至第一页
+                });
+            });
+
+            //插入和修改
+            //监听头部工具栏事件
+            table.on("toolbar(test)",function (obj) {
+                switch(obj.event){
+                    case 'add':
+                        openAddLog();
+                        break;
+                    case 'deleteBatch':
+                        deleteBatch();
+                        break;
+                };
+            });
+
+            //监听行工具事件
+            table.on('tool(test)', function(obj){
+                var data = obj.data; //获得当前行数据
+                var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+
+                if(layEvent === 'del'){ //删除
+                    doDeleteLog(data);
+                } else if(layEvent === 'edit'){ //编辑
+                    openUpdateLog(data);
+                }
+            });
+
+            //删除
+            function doDeleteLog(data){
+                layer.confirm('确定删除日志编号为 '+data.logId+' 的日志信息吗?', function(){
+                    //向服务端发送删除指令
+                    $.post("/log/delLog?id="+data.logId,function(obj) {
+                        layer.msg(obj.msg,{icon:1,time:1000,});
+                        //刷新数据表格
+                        tbIns.reload();
+                    });
+                });
+            }
+
+            //根据url进行添加和更新
+            var url;
+            //先声明弹出层组件序号 便于之后关闭
+            var layerIndex;
+            //判断是打开还是修改
+            var isAddOrUpdate = false;
+            //打开添加页面
+            function openAddLog(){
+                layerIndex = layer.open({
+                    type:1,
+                    title:"添加日志",
+                    content:$("#saveOrUpdateDiv"),
+                    area:['710px','400px'],
+                    success:function (index) {
+                        //情况表单数据
+                        //Jquery没有reset 变成dom调用reset
+                        $("#dataFrm")[0].reset();
+                        $("#logType").empty();
+                        selectTypeTypesAdd();
+                        url = "/log/addLog";
+                        isAddOrUpdate = true;
+                        //初始化数据
+                    }
+                });
+            }
+            //打开修改页面
+            function openUpdateLog(data){
+                layerIndex = layer.open({
+                    type:1,
+                    title:"更新日志",
+                    content:$("#saveOrUpdateDiv"),
+                    area:['710px','400px'],
+                    success:function () {
+                        $("#logType").empty();
+                        form.val("dataFrm",data);
+                        selectTypeTypesUpdate(data);
+                        url = "/log/updateLog";
+                        isAddOrUpdate = false;
+                    }
+                });
+            }
+
+            form.on('select(searchType)', function(data){
+                /*console.log(data.elem); //得到select原始DOM对象
+                console.log(data.value); //得到被选中的值
+                console.log(data.othis); //得到美化后的DOM对象*/
+                if(isAddOrUpdate){
+                    //初始化数据
+                    $.get("/log/initLogInfo",{
+                        logType:data.value
+                    },function (obj) {
+                        var info = obj.data;
+                        $("#logId").val(info.logId);
+                        $("#createTime").val(info.createTime);
+                    });
+                }
+            });
+
+
+
+            //保存数据
+            form.on('submit(doSave)', function(data){
+                //序列化表单数据
+                var params = $("#dataFrm").serialize();
+                $.post(url,params,function (data) {
+                    if(data.code==200){
+                        layer.msg(data.msg,{icon:1,time:2000,});
+                        //关闭弹出层
+                        layer.close(layerIndex);
+                        //刷新数据表格
+                        tbIns.reload();
+                    }else {
+                        layer.msg(data.msg,{icon:2,time:2000,});
+                    }
+                })
+            });
+            //批量删除
+            function deleteBatch() {
+                //获取数据行
+                var checkStatus = table.checkStatus('test');
+                var data = checkStatus.data;
+                if(data==""){
+                    layer.msg("请选择删除选项!",{icon:2,time:1000,});
+                    return false;
+                }
+                var params="";
+                $.each(data,function (index, item) {
+                    if(index==0){
+                        params=params+"ids="+item.logId;
+                    }else {
+                        params=params+"&ids="+item.logId;
+                    }
+                });
+                layer.confirm('真的删除这些日志信息么?', function(){
+                    //向服务端发送删除指令
+                    $.post("/log/delBatchLog",params,function(obj) {
+                        layer.msg(obj.msg,{icon:1,time:500,});
+                        //刷新数据表格
+                        tbIns.reload();
+                    });
+                });
+            }
+
+            //重置表单
+            $("#resetInfo").click(function() {
+                $(".contentInfo").val('');
+            });
+        });
+    </script>
+</body>
+</html>

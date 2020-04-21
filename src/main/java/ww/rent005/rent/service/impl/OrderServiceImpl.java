@@ -2,7 +2,6 @@ package ww.rent005.rent.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
-import ww.rent005.rent.entity.Car;
 import ww.rent005.rent.entity.Order;
 import ww.rent005.rent.mapper.OrderMapper;
 import ww.rent005.rent.service.OrderService;
@@ -24,5 +23,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Override
     public List<Order> findAllOrders(OrderVo orderVo) {
         return this.baseMapper.findAllOrders(orderVo);
+    }
+
+    @Override
+    public List<Order> findOrdersByCarId(String carId) {
+        return this.baseMapper.findOrdersByCarId(carId);
     }
 }

@@ -62,6 +62,7 @@ shiro:
   - /index.html*
   - /rent/login*
   - /rent/register*
+  - /rent/forget*
   - /user/addUser
   - /login/login*
   ##注意添加验证码过滤 ┭┮﹏┭┮

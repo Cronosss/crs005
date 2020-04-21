@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" class="page-fill">
+<head>
+   <meta charset="UTF-8">
+   <title>租车线上管理系统</title>
+   <link rel="shortcut icon" href="/resources/images/favicon.ico" type="image/x-icon"/>
+   <link rel="stylesheet" href="/resources/css/oksub.css"/>
+   <style>
+   </style>
+</head>
+<body class="page-fill">
+<div class="page-fill" id="login">
+   <form class="layui-form">
+      <div class="login_face"><img src="/resources/images/logo.png"></div>
+      <div class="layui-form-item input-item">
+         <label for="username">用户名</label>
+         <input type="text" lay-verify="required" name="userName" placeholder="请输入账号" autocomplete="off" id="username" class="layui-input">
+      </div>
+      <div class="layui-form-item input-item">
+         <label for="email">邮箱</label>
+         <input type="email" lay-verify="required|email" name="passWord" placeholder="请输入邮箱" autocomplete="off" id="email" class="layui-input">
+      </div>
+      <div class="layui-form-item input-item" style="display: flex;">
+         <label for="authCode">验证码</label>
+         <input type="text" lay-verify="required" name="code" placeholder="请输入验证码"
+                id="authCode" autocomplete="off" maxlength="8" class="layui-input">
+         <img src="/login/getCode" onclick="this.src=this.src+'?'">
+      </div>
+      <div class="layui-form-item">
+         <button class="layui-btn layui-block" lay-filter="login" lay-submit="">确定发送</button>
+      </div>
+      <div class="login-link">
+         <a href="/rent/login">登录</a>
+         <a href="/rent/register">注册</a>
+      </div>
+   </form>
+</div>
+<!--js逻辑-->
+<script src="/resources/lib/layui/layui.js"></script>
+<script>
+   layui.use(["form", "jquery"], function () {
+      let form = layui.form;
+      let $ = layui.jquery;
+
+      /**
+       * 数据校验
+       */
+      form.verify({
+         password: [/^[\S]{6,12}$/, "密码必须6到12位，且不能出现空格"]
+      });
+
+      /**
+       * 表单提交
+       */
+      //登录按钮
+      form.on("submit(login)",function(data){
+         var btn =  $(this);
+         //设置登录按钮  为不可点击
+         btn.text("登录中...").attr("disabled","disabled").addClass("layui-disabled");
+         $.post("/login/login",data.field,function(rs){
+            //设置登录按钮 恢复可点击   在前端防止 重复点击
+            btn.text("登录").attr("disabled",false).removeClass("layui-disabled");
+            layer.msg(rs.msg);
+            if(rs.code != 200){
+               layer.msg(rs.msg);
+            }else{
+               //跳转到templates/rent/index/index.html页面
+               layer.msg(rs.msg);
+               location.href="/rent/index";
+            }
+         });
+         return false;
+      })
+
+      /**
+       * 表单input组件单击时
+       */
+      $("#login .input-item .layui-input").click(function (e) {
+         e.stopPropagation();
+         $(this).addClass("layui-input-focus").find(".layui-input").focus();
+      });
+
+      /**
+       * 表单input组件获取焦点时
+       */
+      $("#login .layui-form-item .layui-input").focus(function () {
+         $(this).parent().addClass("layui-input-focus");
+      });
+
+      /**
+       * 表单input组件失去焦点时
+       */
+      $("#login .layui-form-item .layui-input").blur(function () {
+         $(this).parent().removeClass("layui-input-focus");
+         if ($(this).val() != "") {
+            $(this).parent().addClass("layui-input-active");
+         } else {
+            $(this).parent().removeClass("layui-input-active");
+         }
+      })
+   });
+</script>
+</body>
+</html>

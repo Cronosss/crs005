@@ -1,10 +1,12 @@
 package ww.rent005.rent.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 import ww.rent005.rent.entity.Car;
 import ww.rent005.rent.vo.CarVo;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -25,4 +27,8 @@ public interface CarMapper extends BaseMapper<Car> {
     List<Car> findAllCar(CarVo carVo);
     //根据id查询车辆信息
     Car findCarById(String carId);
+    //根据id查询车辆信息
+    Car findCarByIdReturnMap(String carId);
+    //根据ids查询
+    List<Car> findAllCarByIds(@Param("carIds") Set<String> carIds);
 }

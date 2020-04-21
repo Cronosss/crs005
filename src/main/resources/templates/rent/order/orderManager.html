@@ -19,9 +19,9 @@
     <!--面包屑导航区域-->
     <div class="ok-body-breadcrumb">
         <span class="layui-breadcrumb" style="visibility: visible;">
-            <a><cite>基础管理</cite></a>
+            <a><cite>业务系统</cite></a>
             <span lay-separator>/</span>
-            <a><cite>订单管理</cite></a>
+            <a><cite>租用单管理</cite></a>
         </span>
         <a class="layui-btn layui-btn-sm" href="javascript:location.replace(location.href);" title="刷新">
             <i class="layui-icon layui-icon-refresh"></i>
@@ -51,14 +51,14 @@
             </div>
             <div class="layui-form-item">
                 <div class="layui-inline">
-                    <label class="layui-form-label">开始时间</label>
+                    <label class="layui-form-label">起租时间</label>
                     <div class="layui-input-inline">
                         <input type="text" name="startTime" id="startTime" readonly="readonly"   autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-inline">
-                    <label class="layui-form-label">结束时间</label>
+                    <label class="layui-form-label">预还时间</label>
                     <div class="layui-input-inline">
                         <input type="text" name="endOfTime" id="endOfTime" readonly="readonly"  autocomplete="off"
                                class="layui-input">
@@ -264,7 +264,7 @@
                 url:'/order/loadOrders', //数据接口
                 title: '订单表', //数据导出的标题
                 page: true, //是否启用分页
-                height:"full-140",
+                height:"full-200",
                 toolbar:"#toolbarTop", //表格工具条
                 defaultToolbar:['filter'],    //右侧工具栏
                 cols: [
@@ -276,17 +276,30 @@
                     {field:'dayCount', title:'租用天数',width:100,align:'center'},
                     {field:'orderPrice', title:'租用金额/天', width:120,align:'center'},
                     {field:'orderDeposit', title:'押金金额/天', sort:true,width:120,align:'center'},
-                    {field:'totalPrice', title:'预计金额', sort:true,width:120,align:'center'},
+                        {field:'totalPrice', title:'预计金额', sort:true,width:120,align:'center',templet:function(res){
+                                return res.orderStatus=='0'?
+                                    /*时间戳判断 大于表示未到时间 未逾期 反之*/
+                                    (new Date(res.endTime).getTime()>new Date().getTime()?res.totalPrice:'<font color=red>'
+                                        + parseInt((Math.floor((new Date().getTime() - new Date(res.endTime).getTime()) /86400000)) * 2 * (res.orderPrice+res.orderDeposit) +(res.totalPrice )) +
+                                        '</font>')
+                                    :res.totalPrice;
+                            }},
                     {field:'orderStatus', title:'订单状态', sort:true,width:105,align:'center',templet:function(res){
-                            return res.orderStatus=='1'?'<font color=red>未完成</font>':'<font color=green>完成</font>';
+                            return res.orderStatus=='0'?'<font color=red>未完成</font>':'<font color=green>已完成</font>';
                         }},
-                    {field:'isOver', title:'逾期状态', sort:true,width:105,align:'center',templet:function(res){
-                            return res.isOver=='1'?'<font color=red>逾期</font>':'<font color=green>未逾期</font>';
-                        }},
+                    /*{field:'isOver', title:'逾期状态', sort:true,width:105,align:'center',templet:function(res){
+                            return res.isOver=='0'?'<font color=green>未逾期</font>':'<font color=red>逾期</font>';
+                        }},*/
+                        {field:'isOver', title:'逾期状态', sort:true,width:105,align:'center',templet:function(res){
+                                return res.orderStatus=='0'?
+                                    /*时间戳判断 大于表示未到时间 未逾期 反之*/
+                                    (new Date(res.endTime).getTime()>new Date().getTime()?'<font color=green>未逾期</font>':'<font color=red>逾期</font>')
+                                    :(res.isOver=='0'?'<font color=green>未逾期</font>':'<font color=red>逾期</font>');
+                            }},
                     {field:'beginTime', title:'租借时间', sort:true,width:165,align:'center'},
                     {field:'endTime', title:'预还时间', sort:true,width:165,align:'center'},
                     {field:'createTime', title:'创建时间', sort:true,width:165,align:'center'},
-                    {fixed:'right', title:'操作', toolbar:'#barRight', width:195, align:'center'}
+                    {fixed:'right', title:'操作', toolbar:'#barRight', width:200, align:'center'}
                     ]
                 ]
             });
@@ -327,14 +340,16 @@
 
             //删除
             function doDeleteCar(data){
-                layer.confirm('确定删除订单号为 '+data.orderId+' 的订单吗?', function(){
-                    //向服务端发送删除指令
-                    $.post("/order/delOrder?id="+data.orderId,function(obj) {
-                        layer.msg(obj.msg,{icon:1,time:1000,});
-                        //刷新数据表格
-                        tbIns.reload();
+                if(data.orderStatus==1){
+                    layer.confirm('确定删除订单号为 '+data.orderId+' 的订单吗?', function(){
+                        //向服务端发送删除指令
+                        $.post("/order/delOrder?id="+data.orderId,function(obj) {
+                            layer.msg(obj.msg,{icon:1,time:1000,});
+                            //刷新数据表格
+                            tbIns.reload();
+                        });
                     });
-                });
+                }
             }
 
             //查看详情
@@ -345,9 +360,13 @@
                     content:$("#orderInfoShowDiv"),
                     area:['710px','470px'],
                     success:function () {
-                        form.val("orderInfo",data);
-
+                        //处理未完成订单动态显示逾期状态
+                        //未完成订单预还时间与当前时间比较 如果小于 则为逾期
+                        if (data.orderStatus=='0'&&(new Date(data.endTime).getTime()<new Date().getTime())){
+                            data.isOver=1;
                         }
+                        form.val("orderInfo",data);
+                    }
                 });
             }
 
@@ -361,21 +380,30 @@
                     return false;
                 }
                 var params="";
+                var flag = false;
                 $.each(data,function (index, item) {
+                    if(item.orderStatus==0){
+                        flag = true;
+                    }
                     if(index==0){
                         params=params+"ids="+item.orderId;
                     }else {
                         params=params+"&ids="+item.orderId;
                     }
                 });
-                layer.confirm('真的删除这些订单么?', function(){
-                    //向服务端发送删除指令
-                    $.post("/order/delBatchOrder",params,function(obj) {
-                        layer.msg(obj.msg,{icon:1,time:500,});
-                        //刷新数据表格
-                        tbIns.reload();
+                if (flag){
+                    layer.msg("未完成订单不能删除",{icon:2,time:2000,});
+                    return false;
+                } else {
+                    layer.confirm('真的删除这些订单么?', function(){
+                        //向服务端发送删除指令
+                        $.post("/order/delBatchOrder",params,function(obj) {
+                            layer.msg(obj.msg,{icon:1,time:500,});
+                            //刷新数据表格
+                            tbIns.reload();
+                        });
                     });
-                });
+                }
             }
         });
     </script>
