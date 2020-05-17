@@ -5,6 +5,7 @@ import ww.rent005.rent.entity.Role;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -41,4 +42,6 @@ public interface RoleService extends IService<Role> {
      * @return
      */
     List<Role> findUserRoleByUid(String userId);
+
+    Set<String> listRoles(String userName);
 }

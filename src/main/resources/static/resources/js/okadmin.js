@@ -235,7 +235,8 @@ layui.use(["element", "layer", "okUtils", "okTab", "okLayer"], function () {
      */
     $("#logout").click(function () {
         okLayer.confirm("确定要退出吗？", function (index) {
-            window.location = "/login/logout";
+            okTab.tabClose(3);
+            window.location = "/login/logGo";
         });
     });
 

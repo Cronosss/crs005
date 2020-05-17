@@ -144,7 +144,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">解决用户</label>
                             <div class="layui-input-block">
-                                <input type="text" name="solveName" class="layui-input" lay-verify="required" readonly>
+                                <input type="text" name="solveName" class="layui-input" lay-verify="required">
                             </div>
                         </div>
                     </div>
@@ -282,7 +282,7 @@
 <script type="text/javascript" src="/resources/layui/layui.js"></script>
 <script type="text/html" id="toolbarTop">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="add">增加</button>
+        <!--<button class="layui-btn layui-btn-sm" lay-event="add">增加</button>-->
         <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="deleteBatch">批量删除</button>
     </div>
 </script>
@@ -345,9 +345,9 @@
         //监听头部工具栏事件
         table.on("toolbar(test)",function (obj) {
             switch(obj.event){
-                case 'add':
+                /*case 'add':
                     openAddBack();
-                    break;
+                    break;*/
                 case 'deleteBatch':
                     deleteBatch();
                     break;

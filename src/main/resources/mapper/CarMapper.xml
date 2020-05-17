@@ -88,5 +88,21 @@
             </foreach>
         </where>
     </select>
+    <select id="getNewCar" resultType="java.lang.String">
+        select car_img
+        from tb_car
+        order by create_time desc
+        limit 5 ;
+    </select>
+    <select id="getRankingListCar" resultType="ww.rent005.rent.entity.Car">
+        select car_id,car_img from tb_car
+        <where>
+            car_id in
+            <foreach item="carId" collection="carIds"
+                     open="(" separator="," close=")">
+                #{carId}
+            </foreach>
+        </where>
+    </select>
 
 </mapper>

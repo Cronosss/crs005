@@ -5,6 +5,7 @@ import ww.rent005.rent.entity.Permission;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -30,4 +31,12 @@ public interface PermissionService extends IService<Permission> {
      */
     List<Permission> findRolePermissionsByRid(Integer roleid);
 
+    /**
+     * 根据userName查询拥有的权限
+     * @param userName
+     * @return
+     */
+    Set<String> listPermissions(String userName);
+
+    List<Permission> findOwnMenuByUserId(String type, Integer available, String userId);
 }

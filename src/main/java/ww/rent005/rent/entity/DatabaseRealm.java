@@ -10,6 +10,8 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import ww.rent005.rent.service.PermissionService;
+import ww.rent005.rent.service.RoleService;
 import ww.rent005.rent.service.UserService;
 
 /**
@@ -22,6 +24,10 @@ public class DatabaseRealm extends AuthorizingRealm {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    PermissionService permissionService;
+    @Autowired
+    RoleService roleService;
 
     /**
      * 授权
@@ -30,6 +36,17 @@ public class DatabaseRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
+        /*//能进入到这里，表示账号已经通过验证了
+        String userName =(String) principalCollection.getPrimaryPrincipal();
+        //通过service获取角色和权限
+        Set<String> permissions = permissionService.listPermissions(userName);
+        Set<String> roles = roleService.listRoles(userName);
+
+        //授权对象
+        SimpleAuthorizationInfo s = new SimpleAuthorizationInfo();
+        s.setStringPermissions(permissions);
+        s.setRoles(roles);
+        return s;*/
         return null;
     }
 

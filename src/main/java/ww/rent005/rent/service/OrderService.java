@@ -19,4 +19,8 @@ public interface OrderService extends IService<Order> {
     List<Order> findAllOrders(OrderVo orderVo);
 
     List<Order> findOrdersByCarId(String carId);
+
+    List<String> getRankingListUser();
+
+    List<String> getRankingListCarForCarIds();
 }

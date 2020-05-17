@@ -105,4 +105,9 @@ public class User implements Serializable {
 
     private String email;
 
+    /**
+     * 登录状态
+     */
+    private Integer loginStatus;
+
 }

@@ -67,4 +67,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         qw.eq("nick_name", nickName);
         return this.getBaseMapper().selectOne(qw);
     }
+
+    //在线人数
+    @Override
+    public Integer findOnLineCount() {
+        QueryWrapper<User> qw=new QueryWrapper<>();
+        User user = new User();
+        user.setLoginStatus(1);
+        qw.eq("login_status",user.getLoginStatus());
+        return this.getBaseMapper().selectCount(qw);
+    }
 }

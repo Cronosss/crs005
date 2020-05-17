@@ -1,5 +1,6 @@
 package ww.rent005.rent.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 import ww.rent005.rent.entity.Car;
@@ -7,6 +8,7 @@ import ww.rent005.rent.mapper.CarMapper;
 import ww.rent005.rent.service.CarService;
 import ww.rent005.rent.vo.CarVo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -50,6 +52,35 @@ public class CarServiceImpl extends ServiceImpl<CarMapper, Car> implements CarSe
     @Override
     public Car findCarByIdReturnMap(String carId) {
         return this.baseMapper.findCarByIdReturnMap(carId);
+    }
+
+    @Override
+    public Integer findCarCount() {
+        return this.baseMapper.selectCount(new QueryWrapper<>());
+    }
+
+    @Override
+    public Integer findCarCountInRent() {
+        QueryWrapper<Car> qw = new QueryWrapper<>();
+        Car car = new Car();
+        car.setRentStatus(1);
+        qw.eq(car.getRentStatus()!=null, "rent_status", car.getRentStatus());
+        return this.baseMapper.selectCount(qw);
+    }
+
+    @Override
+    public List<String> getNewCar() {
+        return this.baseMapper.getNewCar();
+    }
+
+    @Override
+    public List<Car> getRankingListCar(List<String> carIds) {
+        List<Car> cars = new ArrayList<>();
+        for(String carId:carIds){
+            cars.add(this.baseMapper.findCarById(carId));
+        }
+        return cars;
+        //return this.baseMapper.getRankingListCar(carIds);
     }
 
 }

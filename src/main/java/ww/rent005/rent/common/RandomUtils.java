@@ -1,8 +1,7 @@
 package ww.rent005.rent.common;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 
 /**
  * 生成随机数值
@@ -88,6 +87,15 @@ public class RandomUtils {
         return sb.toString();
     }
 
+    //获取公告Id -用于公告Id
+    public static String getRandomArticleId(){
+        StringBuffer sb = new StringBuffer(10);
+        sb.append("ARTICLE_"+sdf3.format(new Date()));
+        sb.append(Character.toString(chars.charAt((int)(Math.random() * 26))).toUpperCase());
+        sb.append(random.nextInt(9000)+1000);
+        return sb.toString();
+    }
+
     //获取当前年月 -用于图片文件夹
     public static String getCurrentDateString() {
         return sdf2.format(new Date());
@@ -106,5 +114,6 @@ public class RandomUtils {
         String fileSuffix = fileName.substring(fileName.lastIndexOf("."),fileName.length());
         return timeNumber+num+fileSuffix+suffix;
     }
+
 
 }

@@ -16,6 +16,7 @@
         <result column="img" property="img" />
         <result column="salt" property="salt" />
         <result column="create_time" property="createTime" />
+        <result column="login_status" property="loginStatus" />
     </resultMap>
 
     <!-- 通用查询结果列 -->

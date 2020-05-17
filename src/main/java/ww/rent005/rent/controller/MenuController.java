@@ -50,12 +50,14 @@ public class MenuController {
         List<Permission> permissionList = null;
 
         //如果为超级用户
-        if(user.getType() == Constast.USER_TYPE_SUPER) {
+/*        if(user.getType() == Constast.USER_TYPE_SUPER) {
             permissionList = permissionService.list(qw);
         }else {
             //根据用户ID+角色+权限查询
             permissionList = permissionService.list(qw);
-        }
+        }*/
+        permissionList = permissionService.list(qw);
+        //permissionList = this.permissionService.findOwnMenuByUserId(Constast.TYPE_MENU, (Integer) Constast.AVAILABLE_TRUE,user.getUserId());
 
         //将数据放入Tree中
         List<TreeNode> nodes = new ArrayList<>();

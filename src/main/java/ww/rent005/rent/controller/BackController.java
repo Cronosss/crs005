@@ -17,6 +17,7 @@ import ww.rent005.rent.service.BackService;
 import ww.rent005.rent.vo.BackVo;
 
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * <p>
@@ -39,7 +40,9 @@ public class BackController {
     @RequestMapping("addBack")
     public Result addReturn(BackVo backVo) {
         try {
-
+            /*//设置id 会增加一个初始值
+            backVo.setBackId(RandomUtils.getRandomBackId(backVo.getAdType()));
+            this.backService.save(backVo);*/
             return Result.ADD_SUCCESS;
         } catch (Exception e) {
             e.printStackTrace();
@@ -96,7 +99,13 @@ public class BackController {
     @RequestMapping("updateBack")
     public Result updateReturn(BackVo backVo) {
         try {
-
+            Back back = this.backService.getById(backVo.getBackId());
+            if(back.getIsSolve()==1){
+                return new Result(-1,"已解决,无法更改",null);
+            }else {
+                backVo.setUpdateTime(new Date());
+                this.backService.updateById(backVo);
+            }
             return Result.UPDATE_SUCCESS;
         }
         catch (Exception e) {

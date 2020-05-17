@@ -6,6 +6,7 @@ import ww.rent005.rent.entity.Role;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -43,4 +44,6 @@ public interface RoleMapper extends BaseMapper<Role> {
      * @return
      */
     List<Role> findUserRoleByUid(@Param("available") Integer available, @Param("uid") String uid);
+
+    Set<String> listRoles(String userName);
 }

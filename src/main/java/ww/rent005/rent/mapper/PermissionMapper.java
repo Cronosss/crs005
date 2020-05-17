@@ -6,6 +6,7 @@ import ww.rent005.rent.entity.Permission;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -31,4 +32,12 @@ public interface PermissionMapper extends BaseMapper<Permission> {
      */
     List<Permission> findRolePermissionsByRid(@Param("available") Integer available, @Param("rid") Integer rid);
 
+    /**
+     * 根据userName查询拥有的权限
+     * @param userName
+     * @return
+     */
+    Set<String> listPermissions(String userName);
+
+    List<Permission> findOwnMenuByUserId(@Param("type") String type,@Param("available")  Integer available, @Param("userId")String userId);
 }

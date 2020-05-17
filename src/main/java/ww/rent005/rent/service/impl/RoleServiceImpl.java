@@ -9,6 +9,7 @@ import ww.rent005.rent.service.RoleService;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -56,5 +57,10 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public List<Role> findUserRoleByUid(String userId) {
         //根据rid查询拥有的权限
         return this.getBaseMapper().findUserRoleByUid((Integer) Constast.AVAILABLE_TRUE,userId);
+    }
+
+    @Override
+    public Set<String> listRoles(String userName) {
+        return this.getBaseMapper().listRoles(userName);
     }
 }

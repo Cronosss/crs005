@@ -28,4 +28,12 @@ public interface CarService extends IService<Car> {
     List<Car> findAllCarByIds(Set<String> carIds);
     //根据id查询车辆信息
     Car findCarByIdReturnMap(String carId);
+
+    Integer findCarCount();
+
+    Integer findCarCountInRent();
+
+    List<String> getNewCar();
+
+    List<Car> getRankingListCar(List<String> carIds);
 }

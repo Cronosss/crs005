@@ -1,125 +1,163 @@
 "use strict";
-layui.use(["okUtils", "table", "countUp", "okMock"], function () {
+layui.use(["okUtils", "table", "countUp", "okMock","carousel"], function () {
     var countUp = layui.countUp;
     var table = layui.table;
     var okUtils = layui.okUtils;
     var okMock = layui.okMock;
     var $ = layui.jquery;
 
+    var carousel = layui.carousel;
+
+    var ins ;
+    //建造实例
+    ins = carousel.render({
+        elem: '#carouselView'
+        , width: '100%' //设置容器宽度
+        , height: '300px' //设置容器高度
+        , interval: 3000
+        ,arrow: 'hover' //切换箭头默认显示状态||不显示：none||悬停显示：hover||始终显示：always
+        // , full:'true' //是否全屏轮播,默认false
+        // , arrow: 'always' //始终显示箭头和点击按钮
+        // ,anim: 'updown' //切换动画方式，可从各个方向滚动
+    });
+
     /**
-     * 收入、商品、博客、用户
+     * 车辆、人数
      */
     function statText() {
         var elem_nums = $(".stat-text");
-        elem_nums.each(function (i, j) {
-            var ran = parseInt(Math.random() * 99 + 1);
-            !new countUp({
-                target: j,
-                endVal: 20 * ran
-            }).start();
+        $.get("/console/initConInfo",function (obj) {
+            elem_nums.each(function (i, j) {
+                !new countUp({
+                    target: j,
+                    endVal: obj.data[i]
+                }).start();
+            });
         });
     }
 
-    var userSourceOption = {
-        "title": {"text": ""},
-        "tooltip": {"trigger": "axis", "axisPointer": {"type": "cross", "label": {"backgroundColor": "#6a7985"}}},
-        "legend": {"data": ["邮件营销", "联盟广告", "视频广告", "直接访问", "搜索引擎"]},
-        "toolbox": {"feature": {"saveAsImage": {}}},
-        "grid": {"left": "3%", "right": "4%", "bottom": "3%", "containLabel": true},
-        "xAxis": [{"type": "category", "boundaryGap": false, "data": ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]}],
-        "yAxis": [{"type": "value"}],
-        "series": [
-            {"name": "邮件营销", "type": "line", "stack": "总量", "areaStyle": {}, "data": [120, 132, 101, 134, 90, 230, 210]},
-            {"name": "联盟广告", "type": "line", "stack": "总量", "areaStyle": {}, "data": [220, 182, 191, 234, 290, 330, 310]},
-            {"name": "视频广告", "type": "line", "stack": "总量", "areaStyle": {}, "data": [150, 232, 201, 154, 190, 330, 410]},
-            {"name": "直接访问", "type": "line", "stack": "总量", "areaStyle": {"normal": {}}, "data": [320, 332, 301, 334, 390, 330, 320]},
-            {"name": "搜索引擎", "type": "line", "stack": "总量", "label": {"normal": {"show": true, "position": "top"}}, "areaStyle": {"normal": {}}, "data": [820, 932, 901, 934, 1290, 1330, 1320]}
-        ]
-    };
-
-    /**
-     * 用户访问
-     */
-    function userSource() {
-        var userSourceMap = echarts.init($("#userSourceMap")[0], "theme");
-        userSourceMap.setOption(userSourceOption);
-        okUtils.echartsResize([userSourceMap]);
+    function getShowCarImg() {
+        $.get("/console/getNewCarInfo",function (obj) {
+            $.each(obj.data,function (index,item) {
+                var str = '<div>\n' +
+                    '         <img style="width: 99%;height: 300px;margin: 0px 5px" src="/upload/downloadPhoto?type=car&path='+item+'" />\n' +
+                    '      </div>';
+                $('#showNewCar').append(str);
+            });
+            ins.reload({
+                elem: '#carouselView'
+                , width: '100%' //设置容器宽度
+                , height: '300px' //设置容器高度
+                , interval: 3000
+                ,arrow: 'hover' //切换箭头默认显示状态||不显示：none||悬停显示：hover||始终显示：always
+            });
+        });
     }
 
-    /**
-     * 所有用户
-     */
-    function userList() {
-        table.render({
-            method: "get",
-            url: okMock.api.user.list2,
-            elem: '#userData',
-            height: 340,
-            page: true,
-            limit: 7,
-            cols: [[
-                {field: "id", title: "id", width: 50},
-                {field: "u_name", title: "姓名"},
-                {field: "u_sex", title: "性别", width: 80},
-                {field: "u_email", title: "邮箱"},
-                {field: "u_endtime", title: "时间",},
-                {field: "u_grade", title: "等级"}
-            ]],
-            parseData: function (res) {
-                res.data.list.forEach(function (i, j) {
-                    var dateTime = new Date(i.u_endtime);
-                    i.u_endtime = dateTime.getFullYear() + "-" + dateTime.getMonth() + "-" + dateTime.getDay();
-                });
-                return {
-                    "code": res.code,
-                    "count": res.data.count,
-                    "data": res.data.list
+    function getNewArticle() {
+        //最新公告
+        $.get("/console/getNewArticle",function(data){
+            $.each(data.data,function (index,item) {
+                //时间判断 小于一天要显示最新的标志
+                if ((Math.floor((new Date().getTime() - new Date(item.createTime).getTime()) / 86400000) <= 1)) {
+                    var str = '<tr onclick=lookArticleInfo('+item.articleId+')>'
+                        +'<td align="left"><a href="javascript:;"> '+item.articleTitle+'</a>' +
+                        '<i class="layui-icon" style="font-size: 30px; color: #1E9FFF;"> New</i></td>'
+                        +'<td align="right">'+item.createTime.substring(0,10)+'</td>'
+                        +'</tr>';
+                }else {
+                    var str = '<tr onclick=lookArticleInfo('+item.articleId+')>'
+                        +'<td align="left"><a href="javascript:;"> '+item.articleTitle+'</a></td>'
+                        +'<td align="right">'+item.createTime.substring(0,10)+'</td>'
+                        +'</tr>';
                 }
-            }
+                $('#newArticle').append(str);
+            });
         });
     }
 
-    var userLocationOption = {
-        "title": {"text": "用户家庭所在地统计", "subtext": "", "x": "center"},
-        "tooltip": {"trigger": "item"},
-        "visualMap": {
-            "color": ["#eeeeee"], "show": false, "x": "left", "y": "center",
-            "splitList": [
-                {"start": 500, "end": 600},
-                {"start": 400, "end": 500},
-                {"start": 300, "end": 400},
-                {"start": 200, "end": 300},
-                {"start": 100, "end": 200},
-                {"start": 0, "end": 100}
-            ]
-        },
-        "series": [
-            {
-                "name": "用户家庭所在地统计", "roam": true, "type": "map", "mapType": "china", "data": [],
-                "itemStyle": {
-                    "normal": {"areaColor": "#eeeeee", "borderColor": "#aaaaaa", "borderWidth": 0.5},
-                    "emphasis": {"areaColor": "rgba(63,177,227,0.25)", "borderColor": "#3fb1e3", "borderWidth": 1}
-                },
-                "label": {"normal": {"textStyle": {"color": "#000"}}, "emphasis": {"textStyle": {"color": "#000"}}}
-            }
-        ]
-    };
-
-    /**
-     * 用户位置
-     */
-    function userLocation() {
-        var userLocationMap = echarts.init($("#userLocationMap")[0]);
-        var data = [{"name":"北京","value":100},{"name":"天津","value":83},{"name":"上海","value":113},{"name":"重庆","value":188},{"name":"河北","value":197},{"name":"河南","value":327},{"name":"云南","value":371},{"name":"辽宁","value":224},{"name":"黑龙江","value":295},{"name":"湖南","value":463},{"name":"安徽","value":7},{"name":"山东","value":176},{"name":"新疆","value":0},{"name":"江苏","value":396},{"name":"浙江","value":472},{"name":"江西","value":243},{"name":"湖北","value":226},{"name":"广西","value":404},{"name":"甘肃","value":210},{"name":"山西","value":451},{"name":"内蒙古","value":97},{"name":"陕西","value":369},{"name":"吉林","value":221},{"name":"福建","value":216},{"name":"贵州","value":221},{"name":"广东","value":85},{"name":"青海","value":21},{"name":"西藏","value":414},{"name":"四川","value":380},{"name":"宁夏","value":205},{"name":"海南","value":73},{"name":"台湾","value":348},{"name":"香港","value":54},{"name":"澳门","value":340}];
-        userLocationOption.series.data = data;
-        userLocationMap.setOption(userLocationOption);
-        okUtils.echartsResize([userLocationMap]);
+    function getRankingListUser() {
+        //用户排行榜
+        $.get("/console/getRankingListUser",function(data){
+            var res = data.data;
+            var str = '<tr>'
+                +'<td style="text-align: center;"><a href="javascript:;"> '+res[0]+'</a><img style="height: 40px"/></td>'
+                +'<td style="text-align: center;"><a href="javascript:;"> '+res[1]+'</a><img style="height: 40px"/></td>'
+                +'<td style="text-align: center;"><a href="javascript:;"> '+res[2]+'</a><img style="height: 40px"/></td>'
+                +'</tr>';
+            $('#rankingListUser').append(str);
+        });
     }
 
+    function getRankingListCar() {
+        //车辆排行榜
+        $.get("/console/getRankingListCar",function(data){
+            var res = data.data;
+            var str ;
+            $.each(res,function (index,item) {
+                if(item==null){
+                    str = '<td style="text-align: center;">无</td>' ;
+                }else{
+                    str = '<td style="text-align: center;"><img style="width: 70px;height: 40px" src="/upload/downloadPhoto?type=car&path='+item.carImg+'" /></td>';
+                }
+                $('#rankingListCar').append(str);
+            });
+        });
+    }
+
+    window.lookCarInfo =function lookCarInfo(id) {
+        //向服务端发送删除指令
+        $.get("/console/getCarInfo?id="+id,function(data) {
+            var res = data.data;
+            layer.open({
+                type:1,
+                title:"车辆详情",
+                content:$("#carInfoShowDiv"),
+                area:['720px','600px'],
+                success:function () {
+                    form.val("carInfo",res);
+                    $("#nickName2").val(res.user.nickName);
+                    $("#phone2").val(res.user.phone);
+                    //获取图片路径
+                    $("#carImgShow2").attr("src","/upload/downloadPhoto?path="+res.carImg+"&type=car");
+                }
+            });
+        });
+    }
+
+    window.lookArticleInfo =function lookArticleInfo(id) {
+        //向服务端发送删除指令
+        $.get("/console/getArticleById?articleId="+id,function(data) {
+            var res = data.data;
+            layer.open({
+                type:1,
+                title:"查看公告",
+                content:$("#showArticleDiv"),
+                area:['600px','400px'],
+                success:function () {
+                    $("#articleTitle").html(res.articleTitle);
+                    $("#articleContent").html(res.articleContent);
+                    $("#sendName").html(res.sendName);
+                    $("#createTime").html(res.createTime);
+                }
+            });
+        });
+    }
+
+    //统计数据
     statText();
-    userSource();
-    userList();
-    userLocation();
+    //最新车辆
+    getShowCarImg();
+    //最新公告
+    getNewArticle();
+    //用户排行榜
+    getRankingListUser();
+    //车辆排行榜
+    getRankingListCar();
 });
+
+
+
+
 
 

@@ -32,4 +32,16 @@
         select p.* from tb_permission p inner join tb_role_permission rp on p.id=rp.pid
         where p.available = #{available} and rp.rid=#{rid} ;
     </select>
+    <select id="listPermissions" resultType="java.lang.String">
+        select p.user_id, p.user_name from tb_user u
+				left join tb_role_user ru on u.user_id = ru.uid
+				left join tb_role r on r.id = ru.rid
+				left join tb_role_permission rp on r.id = rp.rid
+				left join tb_permission p on p.id = rp.pid
+			where u.user_name =#{userName}
+    </select>
+    <select id="findOwnMenuByUserId" resultType="ww.rent005.rent.entity.Permission">
+              select distinct m.* from tb_permission m inner join tb_role_permission rm inner join tb_role_user ru
+      on(m.id=rm.pid and rm.rid=ru.rid) where m.available = #{available} and m.type = #{type} and ru.uid = #{userId}
+    </select>
 </mapper>

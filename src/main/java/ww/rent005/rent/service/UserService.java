@@ -26,4 +26,7 @@ public interface UserService extends IService<User> {
     Integer findUserByNickName(String nickName);
     //根据nickName获取id
     User findUserIdByNickName(String nickName);
+    //在线人数
+    Integer findOnLineCount();
+
 }

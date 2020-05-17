@@ -35,7 +35,7 @@
                 and create_time <![CDATA[<=]]> #{endOfTime}
             </if>
         </where>
-        order by create_time,log_type desc
+        order by create_time desc ,log_type
     </select>
 
 </mapper>

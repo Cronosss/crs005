@@ -36,6 +36,12 @@
         select r.* from tb_role r inner join tb_role_user ru on r.id = ru.rid
         where r.available = #{available} and ru.uid=#{uid} ;
     </select>
+    <select id="listRoles" resultType="java.lang.String">
+                select r.id, r.name from user u
+				left join user_role ur on u.id = ur.uid
+				left join Role r on r.id = ur.rid
+		where u.name = #{name}
+    </select>
 
 
 </mapper>

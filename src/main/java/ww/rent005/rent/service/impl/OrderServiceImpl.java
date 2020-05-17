@@ -29,4 +29,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     public List<Order> findOrdersByCarId(String carId) {
         return this.baseMapper.findOrdersByCarId(carId);
     }
+
+    @Override
+    public List<String> getRankingListUser() {
+        return this.baseMapper.getRankingListUser();
+    }
+
+    @Override
+    public List<String> getRankingListCarForCarIds() {
+        return this.baseMapper.getRankingListCarForCarIds();
+    }
+
+
 }

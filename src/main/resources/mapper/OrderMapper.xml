@@ -63,5 +63,11 @@
     <select id="findOrdersByCarId" resultType="ww.rent005.rent.entity.Order">
         select <include refid="Base_Column_List"/> from tb_order where car_id=#{carId}
     </select>
+    <select id="getRankingListUser" resultType="java.lang.String">
+        select nick_name from tb_order where order_status = 1 group by nick_name ORDER BY COUNT(*) desc limit 3;
+    </select>
+    <select id="getRankingListCarForCarIds" resultType="java.lang.String">
+        select car_id from tb_order where order_status = 1 group by car_id ORDER BY COUNT(*) desc limit 3;
+    </select>
 
 </mapper>

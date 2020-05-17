@@ -9,6 +9,7 @@ import ww.rent005.rent.service.PermissionService;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 /**
  * <p>
@@ -34,5 +35,15 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     public List<Permission> findRolePermissionsByRid(Integer roleid) {
         //根据rid查询拥有的权限
         return this.getBaseMapper().findRolePermissionsByRid((Integer) Constast.AVAILABLE_TRUE,roleid);
+    }
+
+    @Override
+    public Set<String> listPermissions(String userName) {
+        return this.baseMapper.listPermissions(userName);
+    }
+
+    @Override
+    public List<Permission> findOwnMenuByUserId(String type, Integer available, String userId) {
+        return this.baseMapper.findOwnMenuByUserId(type,available,userId);
     }
 }

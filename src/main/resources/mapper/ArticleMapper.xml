@@ -15,5 +15,34 @@
     <sql id="Base_Column_List">
         article_id, article_title, article_content, send_name, create_time
     </sql>
+    <select id="findAllArticles" resultType="ww.rent005.rent.entity.Article">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_article
+        <where>
+            <if test="articleTitle!=null and articleTitle!=''">
+                and article_title like concat("%",#{articleTitle},"%")
+            </if>
+            <if test="articleContent!=null and articleContent!=''">
+                and article_content like concat("%",#{articleContent},"%")
+            </if>
+            <if test="sendName!=null and sendName!=''">
+                and send_name like concat("%",#{sendName},"%")
+            </if>
+            <if test="startTime!=null">
+                and create_time >= #{startTime}
+            </if>
+            <if test="endOfTime!=null">
+                and create_time <![CDATA[<=]]> #{endOfTime}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+    <select id="getNewArticle" resultType="ww.rent005.rent.entity.Article">
+        select <include refid="Base_Column_List"/>
+        from tb_article
+        order by create_time desc
+        limit 8 ;
+    </select>
 
 </mapper>

@@ -1,20 +1,22 @@
 package ww.rent005.rent.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.commons.lang3.StringUtils;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ww.rent005.rent.common.DataGrid;
+import ww.rent005.rent.common.RandomUtils;
 import ww.rent005.rent.common.Result;
+import ww.rent005.rent.common.WebUtils;
 import ww.rent005.rent.entity.Article;
+import ww.rent005.rent.entity.User;
 import ww.rent005.rent.service.ArticleService;
 import ww.rent005.rent.vo.ArticleVo;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -37,8 +39,16 @@ public class ArticleController {
     @RequestMapping("addArticle")
     public Result addReturn(ArticleVo articleVo) {
         try {
-
-            return Result.ADD_SUCCESS;
+            User user = (User) WebUtils.getSession().getAttribute("user");
+            if(articleVo.getArticleContent()==null||articleVo.getArticleContent()==""){
+                return new Result(-1,"公告内容不能为空,请重新输入",null);
+            }else {
+                articleVo.setSendName(user.getNickName());
+                articleVo.setCreateTime(new Date());
+                articleVo.setArticleId(RandomUtils.getRandomArticleId());
+                this.articleService.save(articleVo);
+                return Result.ADD_SUCCESS;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return Result.ADD_ERROR;
@@ -52,15 +62,9 @@ public class ArticleController {
      */
     @RequestMapping("loadArticles")
     public DataGrid loadReturns(ArticleVo articleVo) {
-        IPage<Article> page=new Page<>(articleVo.getPage(), articleVo.getLimit());
-        QueryWrapper<Article> qw=new QueryWrapper<>();
-        qw.like(StringUtils.isNotBlank(articleVo.getArticleId()), "article_id", articleVo.getArticleId());
-        qw.like(StringUtils.isNotBlank(articleVo.getArticleTitle()), "article_title", articleVo.getArticleTitle());
-        qw.like(StringUtils.isNotBlank(articleVo.getArticleContent()), "article_content", articleVo.getArticleContent());
-        qw.like(StringUtils.isNotBlank(articleVo.getSendName()), "send_name", articleVo.getSendName());
-        qw.orderByDesc("create_time");
-        this.articleService.page(page, qw);
-        return new DataGrid(page.getTotal(), page.getRecords());
+        com.github.pagehelper.Page<Object> page = PageHelper.startPage(articleVo.getPage(), articleVo.getLimit());
+        List<Article> logList = this.articleService.findAllArticles(articleVo);
+        return new DataGrid(page.getTotal(), logList);
     }
 
 
@@ -72,8 +76,26 @@ public class ArticleController {
     @RequestMapping("updateArticle")
     public Result updateReturn(ArticleVo articleVo) {
         try {
+            Article article = this.articleService.getById(articleVo);
+            if(article.getArticleTitle().equals(articleVo.getArticleTitle())&&article.getArticleContent().equals(articleVo.getArticleContent())){
+                return new Result(-1,"修改失败,无修改操作",null);
+            }else {
+                //需要判断操作员
+                User user = (User) WebUtils.getSession().getAttribute("user");
+                String[] senders = user.getNickName().split(" ");
+                Boolean flag = false;
+                for (String name:senders){
+                    if (user.getNickName()==name)
+                        flag = true;
+                }
+                //如果当前用户操作的人不在发布者里面 则添加
+                if(!flag){
+                    articleVo.setSendName(articleVo.getSendName()+" "+user.getNickName());
+                }
+                this.articleService.updateById(articleVo);
+                return Result.UPDATE_SUCCESS;
+            }
 
-            return Result.UPDATE_SUCCESS;
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -81,6 +103,15 @@ public class ArticleController {
         }
     }
 
+    /**
+     * 根据id查询公告
+     * @param articleId
+     * @return
+     */
+    @RequestMapping("getArticle")
+    public Article getArticle(String articleId){
+        return this.articleService.getById(articleId);
+    }
 
     /**
      * 删除

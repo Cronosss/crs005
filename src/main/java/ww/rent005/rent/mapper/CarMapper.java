@@ -31,4 +31,8 @@ public interface CarMapper extends BaseMapper<Car> {
     Car findCarByIdReturnMap(String carId);
     //根据ids查询
     List<Car> findAllCarByIds(@Param("carIds") Set<String> carIds);
+    //查询最新的车辆信息
+    List<String> getNewCar();
+
+    List<Car> getRankingListCar(@Param("carIds") List<String> carIds);
 }
